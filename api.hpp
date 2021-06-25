@@ -1,0 +1,8 @@
+#pragma once
+
+#include "httplib.h"
+
+using namespace httplib;
+
+void api_health(const Request&, Response&);
+void api_log(const Request&, const Response&);

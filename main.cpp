@@ -1,18 +1,24 @@
+#include <cstdlib>
+#include <string>
+
 #include "httplib.h"
 
+#include "api.hpp"
+
+#define DEFAULT_PORT 8080
+
 int main() {
+	const auto UZR_PORT = std::getenv("UZR_PORT");
+	const int PORT = UZR_PORT ?
+		std::stoi(UZR_PORT) :
+		DEFAULT_PORT;
+
+	std::cout << "Starting on port " << PORT << "\n";
+
 	httplib::Server server;
 
-	server.Get("/", [](const auto&, auto &res) {
-		res.set_content("Hello!", "text/plain");
-	});
+	server.Get("/health", api_health);
+	server.set_logger(api_log);
 
-	server.set_logger([](const auto& req, const auto& _) {
-		(void)_;
-
-		std::cout << req.method << " " << req.path << "\n";
-	});
-
-	std::cout << "Starting...\n";
-	server.listen("0.0.0.0", 8080);
+	server.listen("0.0.0.0", PORT);
 }
