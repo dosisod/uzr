@@ -21,4 +21,7 @@ int main() {
 	server.set_logger(api_log);
 
 	server.listen("0.0.0.0", PORT);
+	perror("uzr");
+
+	return 1;
 }

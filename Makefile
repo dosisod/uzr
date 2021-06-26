@@ -1,15 +1,18 @@
-CXXFLAGS=-g -Wall -Wextra -pedantic -Werror
+CXXFLAGS=-g -O0 -Wall -Wextra -pedantic -Werror
 
 all: uzr
 
 httplib.h.gch: httplib.h
 	$(CXX) -c httplib.h
 
-uzr: httplib.h.gch main.cpp
-	$(CXX) main.cpp api.cpp -lpthread $(CXXFLAGS) -o uzr
+%.o: %.cpp
+	$(CXX) $^ -c -o $@ $(CXXFLAGS)
+
+uzr: httplib.h.gch main.o api.o
+	$(CXX) main.o api.o -lpthread $(CXXFLAGS) -o uzr
 
 clean:
-	rm -f uzr
+	rm -f uzr *.o
 
 cleaner: clean
 	rm -f httplib.h.gch
