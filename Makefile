@@ -8,8 +8,8 @@ httplib.h.gch: httplib.h
 %.o: %.cpp
 	$(CXX) $^ -c -o $@ $(CXXFLAGS)
 
-uzr: httplib.h.gch main.o api.o
-	$(CXX) main.o api.o -lpthread $(CXXFLAGS) -o uzr
+uzr: httplib.h.gch main.o api.o user.o
+	$(CXX) main.o api.o user.o -lcrypt -lpthread $(CXXFLAGS) -o uzr
 
 clean:
 	rm -f uzr *.o

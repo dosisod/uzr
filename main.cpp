@@ -18,6 +18,7 @@ int main() {
 	httplib::Server server;
 
 	server.Get("/health", api_health);
+	server.Get("/login/(.+)/(.+)", api_login);
 	server.set_logger(api_log);
 
 	server.listen("0.0.0.0", PORT);
