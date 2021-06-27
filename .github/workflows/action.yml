@@ -8,5 +8,5 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Build via docker
-      run: docker build .
+    - name: Run tests
+      run: ./test.sh
