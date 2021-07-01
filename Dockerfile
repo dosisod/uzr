@@ -1,11 +1,12 @@
 FROM alpine:3.13.5
 
-RUN apk add build-base
+RUN apk add build-base upx
 
 WORKDIR /app
 COPY . .
 
 RUN make
+RUN upx uzr
 
 
 FROM alpine:3.13.5
