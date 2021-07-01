@@ -1,18 +1,20 @@
-CXXFLAGS=-g -O0 -Wall -Wextra -pedantic -Werror
+CXXFLAGS=-g -O0 -Wall -Wextra -pedantic -Werror -I src/vendor
+OBJS=$(patsubst %.cpp,%.o,$(wildcard src/*.cpp))
+VEND=src/vendor
 
 all: uzr
 
-httplib.h.gch: httplib.h
-	$(CXX) -c httplib.h
+$(VEND)/httplib.h.gch: $(VEND)/httplib.h
+	$(CXX) -c $^
 
 %.o: %.cpp
 	$(CXX) $^ -c -o $@ $(CXXFLAGS)
 
-uzr: httplib.h.gch main.o api.o user.o
-	$(CXX) main.o api.o user.o -lcrypt -lpthread $(CXXFLAGS) -o uzr
+uzr: $(VEND)/httplib.h.gch $(OBJS)
+	$(CXX) $(OBJS) -lcrypt -lpthread $(CXXFLAGS) -o uzr
 
 clean:
-	rm -f uzr *.o
+	rm -f uzr **/*.o
 
 cleaner: clean
-	rm -f httplib.h.gch
+	rm -f src/vendor/httplib.h.gch
