@@ -4,17 +4,18 @@ VEND=src/vendor
 
 all: uzr
 
-$(VEND)/httplib.h.gch: $(VEND)/httplib.h
-	$(CXX) -c $^
+$(VEND)/httplib.o: $(VEND)/httplib.cc $(VEND)/httplib.h
+	$(CXX) -c $< -o $(VEND)/httplib.o
 
-%.o: %.cpp
-	$(CXX) $^ -c -o $@ $(CXXFLAGS)
 
-uzr: $(VEND)/httplib.h.gch $(OBJS)
-	$(CXX) $(OBJS) -lcrypt -lpthread $(CXXFLAGS) -o uzr
+%.o: %.cpp %.hpp
+	$(CXX) $< -c -o $@ $(CXXFLAGS)
+
+uzr: $(VEND)/httplib.o $(OBJS)
+	$(CXX) $(OBJS) $(VEND)/httplib.o -lcrypt -lpthread $(CXXFLAGS) -o uzr
 
 clean:
 	rm -f uzr **/*.o
 
 cleaner: clean
-	rm -f src/vendor/httplib.h.gch
+	rm -f src/vendor/*.gch
