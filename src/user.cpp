@@ -5,36 +5,52 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <json.hpp>
+using json = nlohmann::json;
+
+#include "err.hpp"
 #include "user.hpp"
 
-std::string get_user_by_name(std::string username) {
+std::string get_user_by_name(const char* username) {
 	setpwent();
-	auto entry = getpwnam(username.c_str());
+	auto entry = getpwnam(username);
 	endpwent();
 
 	if (!entry) return nullptr;
 
-	std::ostringstream user;
+	json user = {
+		{ "username", username },
+		{ "userId", entry->pw_uid },
+		{ "groupId", entry->pw_gid }
+	};
 
-	user << "{" <<
-		"\"username\":\"" << username << "\"," <<
-		"\"userId\":" << entry->pw_uid << "," <<
-		"\"groupId\":" << entry->pw_gid <<
-	"}";
-
-	return user.str();
+	return user.dump();
 }
 
-std::string login(std::string username, std::string password) {
+std::string login(std::string body) {
+	json login_req = json::parse(body);
+
+	if (login_req.find("username") == login_req.end() ||
+		login_req.find("password") == login_req.end()
+	) {
+		throw BadRequestException("Username or password not set");
+	}
+
+	const char* username = login_req["username"].get<std::string>().c_str();
+	const char* password = login_req["password"].get<std::string>().c_str();
+
 	setspent();
-	auto entry = getspnam(username.c_str());
+	auto entry = getspnam(username);
 	endspent();
 
-	if (!entry) return "";
+	const char* login_fail_msg = "Invalid username or password";
 
-	if (strcmp(entry->sp_pwdp, crypt(password.c_str(), entry->sp_pwdp)) == 0) {
+	if (!entry)
+		throw UnauthorizedException(login_fail_msg);
+
+	if (strcmp(entry->sp_pwdp, crypt(password, entry->sp_pwdp)) == 0) {
 		return get_user_by_name(username);
 	}
 
-	return "";
+	throw UnauthorizedException(login_fail_msg);
 }
