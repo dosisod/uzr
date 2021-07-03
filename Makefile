@@ -7,11 +7,13 @@ all: uzr
 $(VEND)/httplib.o: $(VEND)/httplib.cc $(VEND)/httplib.h
 	$(CXX) -c $< -o $(VEND)/httplib.o
 
+$(VEND)/json.hpp.gch: $(VEND)/json.hpp
+	$(CXX) -std=c++11 -c $^
 
 %.o: %.cpp %.hpp
 	$(CXX) $< -c -o $@ $(CXXFLAGS)
 
-uzr: $(VEND)/httplib.o $(OBJS)
+uzr: $(VEND)/httplib.o $(VEND)/json.hpp.gch $(OBJS)
 	$(CXX) $(OBJS) $(VEND)/httplib.o -lcrypt -lpthread $(CXXFLAGS) -o uzr
 
 clean:
