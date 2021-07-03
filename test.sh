@@ -22,7 +22,7 @@ fetch() {
 }
 
 die() {
-	mv -f .env.bak .env
+	[ -f .env.bak ] && mv -f .env.bak .env
 	exit 1
 }
 
@@ -58,7 +58,7 @@ assert_response_contains() {
 
 SUDO=$(command -v doas || command -v sudo)
 
-mv -f .env .env.bak
+[ -f .env ] && mv -f .env .env.bak
 
 export UZR_ADMIN_USER=ci
 export UZR_ADMIN_PW=ci_testing_password
@@ -87,4 +87,5 @@ assert_status 401
 assert_response "Invalid username or password"
 
 $SUDO docker-compose down
-mv -f .env.bak .env
+
+[ ! -f .env.bak ] || mv -f .env.bak .env
