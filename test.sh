@@ -90,6 +90,10 @@ POST /login "invalid json"
 assert_status 400
 assert_response_contains "exception"
 
+GET /group/0
+assert_status 200
+assert_response_contains "root"
+
 $SUDO docker-compose -p ci down -v
 
 [ ! -f .env.bak ] || mv -f .env.bak .env

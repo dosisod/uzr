@@ -4,6 +4,7 @@
 #include "json.hpp"
 
 #include "err.hpp"
+#include "group.hpp"
 #include "user.hpp"
 
 using namespace httplib;
@@ -15,6 +16,12 @@ void api_health(const Request&, Response& res) {
 
 void api_login(const Request& req, Response& res) {
 	res.set_content(login(req.body), "text/plain");
+}
+
+void api_get_group_by_id(const Request& req, Response& res) {
+	const unsigned gid = std::stoi(req.matches[1]);
+
+	res.set_content(get_group_by_id(gid), "text/plain");
 }
 
 void api_log(const Request& req, const Response& res) {
