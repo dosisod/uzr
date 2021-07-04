@@ -65,7 +65,7 @@ export UZR_ADMIN_PW=ci_testing_password
 
 printf "UZR_ADMIN_USER=$UZR_ADMIN_USER\nUZR_ADMIN_PW=$UZR_ADMIN_PW\n" > .env
 
-$SUDO docker-compose up --build -d || die
+$SUDO docker-compose -p ci up --build -d || die
 
 # not ideal
 sleep 1
@@ -86,6 +86,10 @@ POST /login '{"username":"invalid_username","password":"_"}'
 assert_status 401
 assert_response "Invalid username or password"
 
-$SUDO docker-compose down
+POST /login "invalid json"
+assert_status 400
+assert_response_contains "exception"
+
+$SUDO docker-compose -p ci down -v
 
 [ ! -f .env.bak ] || mv -f .env.bak .env

@@ -1,11 +1,13 @@
 #include <iostream>
 
 #include "httplib.h"
+#include "json.hpp"
 
 #include "err.hpp"
 #include "user.hpp"
 
 using namespace httplib;
+using json_exception = nlohmann::detail::exception;
 
 void api_health(const Request&, Response& res) {
 	res.set_content("ok", "text/plain");
@@ -27,6 +29,10 @@ void api_handle_exception(const Request&, Response& res, std::exception&) {
 	}
 	catch (HttpException& e) {
 		res.status = e.status;
+		res.set_content(e.what(), "text/plain");
+	}
+	catch (json_exception &e) {
+		res.status = 400;
 		res.set_content(e.what(), "text/plain");
 	}
 	catch (std::exception& e) {
