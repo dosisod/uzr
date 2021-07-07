@@ -19,6 +19,7 @@ int main() {
 
 	server.Get("/health", api_health);
 	server.Post("/login", api_login);
+	server.Post("/user/add", api_add_user);
 	server.Get("/group/(\\d+)", api_get_group_by_id);
 	server.set_logger(api_log);
 	server.set_exception_handler(api_handle_exception);

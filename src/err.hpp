@@ -30,3 +30,9 @@ public:
 	NotFoundException(const char *msg = "Not Found") :
 		HttpException(msg, 404) { }
 };
+
+class ServerErrorException : public HttpException {
+public:
+	ServerErrorException(const char *msg = "Server Error") :
+		HttpException(msg, 500) { }
+};

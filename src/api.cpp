@@ -24,6 +24,10 @@ void api_get_group_by_id(const Request& req, Response& res) {
 	res.set_content(get_group_by_id(gid), "text/plain");
 }
 
+void api_add_user(const Request& req, Response& res) {
+	res.set_content(add_user(req.body), "text/plain");
+}
+
 void api_log(const Request& req, const Response& res) {
 	std::cout << req.method << " " << req.path << " " << res.status << std::endl;
 }

@@ -1,6 +1,8 @@
+#include <errno.h>
 #include <pwd.h>
 #include <shadow.h>
 #include <string.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 #include <json.hpp>
@@ -49,4 +51,51 @@ std::string login(std::string body) {
 	}
 
 	throw UnauthorizedException(login_fail_msg);
+}
+
+std::string add_user(std::string body) {
+	json new_user = json::parse(body);
+
+	std::string username = new_user.value("username", "");
+	std::string password = new_user.value("password", "");
+	std::string gecos = new_user.value("gecos", "");
+
+	if (username.empty())
+		throw BadRequestException("Username cannot be empty");
+	if (password.empty())
+		throw BadRequestException("Password cannot be empty");
+	if (gecos.empty())
+		throw BadRequestException("Gecos cannot be empty");
+
+	errno = 0;
+	auto pid = fork();
+	if (pid == -1) {
+		perror("fork");
+		throw ServerErrorException();
+	}
+	if (pid == 0) {
+		errno = 0;
+		execlp(
+			"/app/scripts/user_add.sh",
+			"/app/scripts/user_add.sh",
+			username.c_str(),
+			password.c_str(),
+			gecos.c_str(),
+			(char *)0
+		);
+
+		if (errno) {
+			perror("execlp");
+			throw ServerErrorException();
+		}
+	}
+
+	int status = 0;
+	waitpid(pid, &status, 0);
+
+	if (WEXITSTATUS(status) != 1) {
+		throw BadRequestException("Username is already taken");
+	}
+
+	return "ok";
 }

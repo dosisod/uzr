@@ -22,6 +22,7 @@ fetch() {
 }
 
 die() {
+	$SUDO docker-compose -p ci down -v
 	[ -f .env.bak ] && mv -f .env.bak .env
 	exit 1
 }
@@ -73,6 +74,15 @@ sleep 1
 GET /health
 assert_status 200
 assert_response ok
+
+ADD_USER_REQ='{"username":"test_user","password":"qwerty","gecos":"asdf"}'
+POST /user/add $ADD_USER_REQ
+assert_status 200
+assert_response ok
+
+POST /user/add $ADD_USER_REQ
+assert_status 400
+assert_response "Username is already taken"
 
 POST /login '{"username":"'$UZR_ADMIN_USER'","password":"'$UZR_ADMIN_PW'"}'
 assert_status 200

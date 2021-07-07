@@ -13,6 +13,7 @@ FROM alpine:3.13.5
 
 RUN apk add --no-cache libstdc++
 COPY --from=0 /app/uzr /app/uzr
+COPY src/scripts/* /app/scripts/
 
 ARG UZR_ADMIN_USER=
 ARG UZR_ADMIN_PW=
