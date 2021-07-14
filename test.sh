@@ -75,7 +75,7 @@ GET /health
 assert_status 200
 assert_response ok
 
-ADD_USER_REQ='{"username":"test_user","password":"qwerty","gecos":"asdf"}'
+ADD_USER_REQ='{"username":"test_user","password":"qwerty","fullName":"TestUser","phoneNumber":"123-456-7890","email":"test@gmail.com"}'
 POST /user/add $ADD_USER_REQ
 assert_status 200
 assert_response ok

@@ -58,14 +58,20 @@ std::string add_user(std::string body) {
 
 	std::string username = new_user.value("username", "");
 	std::string password = new_user.value("password", "");
-	std::string gecos = new_user.value("gecos", "");
+	std::string full_name = new_user.value("fullName", "");
+	std::string phone_number = new_user.value("phoneNumber", "");
+	std::string email = new_user.value("email", "");
 
 	if (username.empty())
 		throw BadRequestException("Username cannot be empty");
 	if (password.empty())
 		throw BadRequestException("Password cannot be empty");
-	if (gecos.empty())
-		throw BadRequestException("Gecos cannot be empty");
+	if (full_name.empty())
+		throw BadRequestException("Name cannot be empty");
+	if (phone_number.empty())
+		throw BadRequestException("Phone number cannot be empty");
+	if (email.empty())
+		throw BadRequestException("Email cannot be empty");
 
 	errno = 0;
 	auto pid = fork();
@@ -80,7 +86,7 @@ std::string add_user(std::string body) {
 			"/app/scripts/user_add.sh",
 			username.c_str(),
 			password.c_str(),
-			gecos.c_str(),
+			(full_name + ",," + phone_number + ",," + email).c_str(),
 			(char *)0
 		);
 
