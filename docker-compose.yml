@@ -10,7 +10,7 @@ services:
         UZR_ADMIN_PW: $UZR_ADMIN_PW
     volumes:
       - uzrdb:/etc
-
+    init: true
     ports:
       - 8080:8080
 

@@ -5,7 +5,7 @@ RUN apk add build-base upx
 WORKDIR /app
 COPY . .
 
-RUN make
+RUN make -j
 RUN upx uzr
 
 
@@ -20,4 +20,4 @@ ARG UZR_ADMIN_PW=
 
 RUN adduser -D $UZR_ADMIN_USER && echo "$UZR_ADMIN_USER:$UZR_ADMIN_PW" | chpasswd
 
-CMD /app/uzr
+CMD ["/app/uzr"]
