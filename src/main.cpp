@@ -6,14 +6,16 @@
 #include "api.hpp"
 
 #define DEFAULT_PORT 8080
+#define DEFAULT_HOST "0.0.0.0"
 
 int main() {
-	const auto UZR_PORT = std::getenv("UZR_PORT");
-	const int PORT = UZR_PORT ?
-		std::stoi(UZR_PORT) :
-		DEFAULT_PORT;
+	const auto uzr_port = std::getenv("UZR_PORT");
+	const int port = uzr_port ? std::stoi(uzr_port) : DEFAULT_PORT;
 
-	std::cout << "Starting on port " << PORT << "\n";
+	const auto uzr_host = std::getenv("UZR_HOST");
+	const char *host = uzr_host ? uzr_host : DEFAULT_HOST;
+
+	std::cout << "Starting on " << host << ":" << port << "\n";
 
 	httplib::Server server;
 
@@ -24,7 +26,7 @@ int main() {
 	server.set_logger(api_log);
 	server.set_exception_handler(api_handle_exception);
 
-	server.listen("0.0.0.0", PORT);
+	server.listen(host, port);
 	perror("uzr");
 
 	return 1;

@@ -2,16 +2,19 @@
 
 A very small user management service built on [cpp-httplib](https://github.com/yhirose/cpp-httplib).
 
-# Installing and Building
+# Installing, Building, and Running
+
+To run manually:
 
 ```
 $ git clone https://github.com/dosisod/uzr
 $ cd uzr
 $ make
+$ ./uzr
 ```
 
-Via docker:
+Via `docker-compose`:
 
 ```
-$ docker build .
+$ docker-compose up --build
 ```
