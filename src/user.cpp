@@ -1,4 +1,5 @@
 #include <errno.h>
+#include <optional>
 #include <pwd.h>
 #include <shadow.h>
 #include <string.h>
@@ -11,20 +12,31 @@ using json = nlohmann::json;
 #include "err.hpp"
 #include "user.hpp"
 
-std::string get_user_by_name(const char* username) {
-	setpwent();
-	auto entry = getpwnam(username);
-	endpwent();
+struct User {
+	std::string username;
+	unsigned long id;
+	unsigned long groupId;
+};
 
-	if (!entry) return nullptr;
+static std::optional<User> db_get_user_by_name(std::string username);
+static bool db_username_validate_password(std::string username, std::string password);
+static void db_add_user(
+	std::string username,
+	std::string password,
+	std::string full_name,
+	std::string phone_number,
+	std::string email
+);
 
-	json user = {
-		{ "username", username },
-		{ "userId", entry->pw_uid },
-		{ "groupId", entry->pw_gid }
-	};
+std::string get_user_by_name(std::string username) {
+	auto user = db_get_user_by_name(username);
+	if (!user) return nullptr;
 
-	return user.dump();
+	return (json {
+		{ "username", user->username },
+		{ "userId", user->id },
+		{ "groupId", user->groupId }
+	}).dump();
 }
 
 std::string login(std::string body) {
@@ -37,20 +49,11 @@ std::string login(std::string body) {
 		throw BadRequestException("Username or password not set");
 	}
 
-	setspent();
-	auto entry = getspnam(username.c_str());
-	endspent();
-
-	const char* login_fail_msg = "Invalid username or password";
-
-	if (!entry)
-		throw UnauthorizedException(login_fail_msg);
-
-	if (strcmp(entry->sp_pwdp, crypt(password.c_str(), entry->sp_pwdp)) == 0) {
-		return get_user_by_name(username.c_str());
+	if (!db_username_validate_password(username.c_str(), password.c_str())) {
+		throw UnauthorizedException("Invalid username or password");
 	}
 
-	throw UnauthorizedException(login_fail_msg);
+	return get_user_by_name(username.c_str());
 }
 
 std::string add_user(std::string body) {
@@ -73,6 +76,42 @@ std::string add_user(std::string body) {
 	if (email.empty())
 		throw BadRequestException("Email cannot be empty");
 
+	db_add_user(username, password, full_name, phone_number, email);
+
+	return "ok";
+}
+
+static std::optional<User> db_get_user_by_name(std::string username) {
+	setpwent();
+	auto entry = getpwnam(username.c_str());
+	endpwent();
+
+	if (!entry) return {};
+
+	return User {
+		.username = username,
+		.id = entry->pw_uid,
+		.groupId = entry->pw_gid
+	};
+}
+
+static bool db_username_validate_password(std::string username, std::string password) {
+	setspent();
+	auto entry = getspnam(username.c_str());
+	endspent();
+
+	if (!entry) return false;
+
+	return strcmp(entry->sp_pwdp, crypt(password.c_str(), entry->sp_pwdp)) == 0;
+}
+
+static void db_add_user(
+	std::string username,
+	std::string password,
+	std::string full_name,
+	std::string phone_number,
+	std::string email
+) {
 	errno = 0;
 	auto pid = fork();
 	if (pid == -1) {
@@ -102,6 +141,4 @@ std::string add_user(std::string body) {
 	if (WEXITSTATUS(status) != 1) {
 		throw BadRequestException("Username is already taken");
 	}
-
-	return "ok";
 }

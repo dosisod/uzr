@@ -1,4 +1,4 @@
-CXXFLAGS=-g -O0 -Wall -Wextra -pedantic -Werror -I src/vendor
+CXXFLAGS=-std=c++20 -g -O0 -Wall -Wextra -pedantic -Werror -I src/vendor
 OBJS=$(patsubst %.cpp,%.o,$(wildcard src/*.cpp))
 VEND=src/vendor
 
@@ -8,7 +8,7 @@ $(VEND)/httplib.o: $(VEND)/httplib.cc $(VEND)/httplib.h
 	$(CXX) -c $< -o $(VEND)/httplib.o
 
 $(VEND)/json.hpp.gch: $(VEND)/json.hpp
-	$(CXX) -std=c++11 -c $^
+	$(CXX) -std=c++20 -c $^
 
 %.o: %.cpp %.hpp
 	$(CXX) $< -c -o $@ $(CXXFLAGS)

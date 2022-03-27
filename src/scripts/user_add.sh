@@ -1,10 +1,10 @@
 #!/bin/sh
 
-USERNAME=$1
-PASSWORD=$2
-GECOS=$3
+username=$1
+password=$2
+gecos=$3
 
-adduser -D -g "$GECOS" "$USERNAME" 2> /dev/null
+adduser -D -g "$gecos" "$username" 2> /dev/null
 [ "$?" = "0" ] && exit 1
 
-echo "$USERNAME:$PASSWORD" | chpasswd 2> /dev/null
+echo "$username:$password" | chpasswd 2> /dev/null

@@ -3,19 +3,23 @@
 UZR_API=http://localhost:8080
 
 GET() {
-	fetch GET $1 $2
+	fetch GET $@
 }
 
 POST() {
-	fetch POST $1 $2
+	fetch POST $@
 }
 
 fetch() {
-	printf "\nfetch $2\n"
+	method="$1"
+	url="$2"
+	data="$3"
 
-	[ "$3" = "" ] || json="-d $3"
+	printf "\nfetch $url\n"
 
-	raw=$(curl -o - -X $1 $json -w "\n%{http_code}" -s $UZR_API$2)
+	[ "$data" = "" ] || json="-d $data"
+
+	raw=$(curl -o - -X $method $json -w "\n%{http_code}" -s $UZR_API$url)
 
 	response=$(echo "$raw" | head -n -1 -)
 	http_code=$(echo "$raw" | tail -n 1 -)
@@ -103,6 +107,9 @@ assert_response_contains "exception"
 GET /group/0
 assert_status 200
 assert_response_contains "root"
+
+GET /group/x
+assert_status 404
 
 $SUDO docker-compose -p ci down -v
 

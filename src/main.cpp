@@ -26,6 +26,7 @@ int main() {
 	server.set_logger(api_log);
 	server.set_exception_handler(api_handle_exception);
 
+	errno = 1;
 	server.listen(host, port);
 	perror("uzr");
 
