@@ -1,12 +1,16 @@
 FROM alpine:3.15.2 AS build
 
-RUN apk add build-base upx
+RUN apk add build-base upx cmake
 
 WORKDIR /app
 COPY . .
 
-RUN make -j
-RUN upx uzr
+RUN mkdir build && \
+	cd build && \
+	cmake .. && \
+	cmake --build . && \
+	upx uzr && \
+	cp uzr ..
 
 
 FROM alpine:3.15.2

@@ -12,3 +12,4 @@ docker-compose.yml
 README.md
 LICENSE
 .env
+build
