@@ -1,15 +1,4 @@
-**/*.gch
-**/*.o
-uzr
+*
 
-test.sh
-
-.dockerfile
-Dockerfile
-docker-compose.yml
-.github
-.git
-README.md
-LICENSE
-.env
-build
+!CMakeLists.txt
+!src

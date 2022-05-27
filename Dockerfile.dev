@@ -1,0 +1,15 @@
+FROM alpine:3.15.2
+
+RUN apk add build-base upx cmake
+
+WORKDIR /app
+COPY . .
+
+WORKDIR /app/build
+
+RUN cmake ..
+
+ARG UZR_ADMIN_USER=
+ARG UZR_ADMIN_PW=
+
+RUN adduser -D $UZR_ADMIN_USER && echo "$UZR_ADMIN_USER:$UZR_ADMIN_PW" | chpasswd

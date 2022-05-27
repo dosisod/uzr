@@ -12,6 +12,8 @@ using json = nlohmann::json;
 #include "err.hpp"
 #include "user.hpp"
 
+#define SCRIPT_DIR "/app/src/scripts"
+
 struct User {
 	std::string username;
 	unsigned long id;
@@ -121,8 +123,8 @@ static void db_add_user(
 	if (pid == 0) {
 		errno = 0;
 		execlp(
-			"/app/scripts/user_add.sh",
-			"/app/scripts/user_add.sh",
+			SCRIPT_DIR"/user_add.sh",
+			SCRIPT_DIR"/user_add.sh",
 			username.c_str(),
 			password.c_str(),
 			(full_name + ",," + phone_number + ",," + email).c_str(),
