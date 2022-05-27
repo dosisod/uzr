@@ -1,3 +1,5 @@
 #include <string>
 
-std::string get_group_by_id(unsigned);
+#include "infrastructure/repo/groupRepo.hpp"
+
+std::string getGroupByIdQuery(IGroupRepo&, unsigned);

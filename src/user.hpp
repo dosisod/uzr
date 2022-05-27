@@ -1,4 +1,8 @@
+#pragma once
+
 #include <string>
 
-std::string login(std::string);
-std::string add_user(std::string);
+#include "domain/repo/userRepo.hpp"
+
+std::string loginCommand(IUserRepo&, std::string);
+std::string addUserCommand(IUserRepo&, std::string);

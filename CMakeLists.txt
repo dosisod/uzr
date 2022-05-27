@@ -11,6 +11,17 @@ add_library(json OBJECT src/vendor/json.hpp)
 target_precompile_headers(json PUBLIC src/vendor/json.hpp)
 
 include_directories(src/vendor)
-add_executable(uzr src/main.cpp src/api.cpp src/group.cpp src/user.cpp)
+add_executable(
+	uzr
+	src/main.cpp
+	src/group.cpp
+	src/user.cpp
+	src/application/app.cpp
+	src/application/error.cpp
+	src/application/config.cpp
+	src/application/routes/health.cpp
+	src/application/routes/auth.cpp
+	src/application/routes/group.cpp
+)
 set_target_properties(uzr PROPERTIES COMPILE_FLAGS "-g -O0 -Wall -Wextra -pedantic -Werror")
 target_link_libraries(uzr PRIVATE httplib crypt json pthread)
