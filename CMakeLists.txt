@@ -10,12 +10,14 @@ add_library(httplib OBJECT src/vendor/httplib.cc)
 add_library(json OBJECT src/vendor/json.hpp)
 target_precompile_headers(json PUBLIC src/vendor/json.hpp)
 
+include_directories(src)
 include_directories(src/vendor)
+
 add_executable(
 	uzr
 	src/main.cpp
-	src/group.cpp
-	src/user.cpp
+	src/application/handlers/group.cpp
+	src/application/handlers/user.cpp
 	src/application/app.cpp
 	src/application/error.cpp
 	src/application/config.cpp

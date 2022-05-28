@@ -3,10 +3,13 @@
 #include <json.hpp>
 using json = nlohmann::json;
 
-#include "infrastructure/repo/userRepo.hpp"
-
 #include "application/error.hpp"
 #include "domain/user.hpp"
+#include "infrastructure/repo/userRepo.hpp"
+
+#include "user.hpp"
+
+std::string userToLoginDto(User& user);
 
 std::string loginCommand(IUserRepo& userRepo, std::string body) {
 	json parsed = json::parse(body);
@@ -27,15 +30,10 @@ std::string loginCommand(IUserRepo& userRepo, std::string body) {
 	auto user = userRepo.getByUsername(login.username);
 	if (!user) return nullptr;
 
-	// TODO: this should be its own function
-	return (json {
-		{ "username", user->username },
-		{ "userId", user->id },
-		{ "groupId", user->groupId }
-	}).dump();
+	return userToLoginDto(user.value());
 }
 
-std::string addUserCommand(IUserRepo& userRepo, std::string body) {
+void addUserCommand(IUserRepo& userRepo, std::string body) {
 	json parsed = json::parse(body);
 
 	auto newUser = UserDto {
@@ -58,7 +56,12 @@ std::string addUserCommand(IUserRepo& userRepo, std::string body) {
 		throw BadRequestException("Email cannot be empty");
 
 	userRepo.addUser(newUser);
+}
 
-	// TODO: probably should use http 204 instead of "ok" (or return user)
-	return "ok";
+std::string userToLoginDto(User& user) {
+	return (json {
+		{ "username", user.username },
+		{ "userId", user.id },
+		{ "groupId", user.groupId }
+	}).dump();
 }

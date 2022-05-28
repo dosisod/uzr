@@ -2,8 +2,8 @@
 
 #include <grp.h>
 
-#include "../../domain/group.hpp"
-#include "../../domain/repo/groupRepo.hpp"
+#include "domain/group.hpp"
+#include "domain/repo/groupRepo.hpp"
 
 class GroupRepo : public IGroupRepo {
 public:

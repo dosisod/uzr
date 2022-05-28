@@ -1,5 +1,5 @@
-#include "../../user.hpp"
-#include "../../infrastructure/repo/userRepo.hpp"
+#include "application/handlers/user.hpp"
+#include "infrastructure/repo/userRepo.hpp"
 
 #include "auth.hpp"
 
@@ -13,6 +13,8 @@ namespace route::auth {
 	void addUser(const Request& req, Response& res) {
 		auto repo = UserRepo();
 
-		res.set_content(addUserCommand(repo, req.body), "text/plain");
+		addUserCommand(repo, req.body);
+
+		res.status = 204;
 	}
 }

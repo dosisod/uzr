@@ -8,8 +8,8 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "../../domain/repo/userRepo.hpp"
-#include "../../application/error.hpp"
+#include "application/error.hpp"
+#include "domain/repo/userRepo.hpp"
 
 // should be defined in src/infrastructre
 #define SCRIPT_DIR "/app/src/scripts"
