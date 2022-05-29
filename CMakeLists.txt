@@ -27,3 +27,9 @@ add_executable(
 )
 set_target_properties(uzr PROPERTIES COMPILE_FLAGS "-g -O0 -Wall -Wextra -pedantic -Werror")
 target_link_libraries(uzr PRIVATE httplib crypt json pthread)
+
+add_executable(
+	test_uzr
+	test/test.cpp
+)
+set_target_properties(test_uzr PROPERTIES COMPILE_FLAGS "-g -O0 -Wall -Wextra -pedantic -Werror")

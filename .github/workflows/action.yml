@@ -8,5 +8,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Run tests
+    - name: Build
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build .
+
+    - name: Run unit tests
+      run: ./build/test_uzr
+
+    - name: Run e2e tests
       run: ./test.sh
