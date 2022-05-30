@@ -2,4 +2,8 @@
 
 #include "infrastructure/repo/groupRepo.hpp"
 
-std::string getGroupByIdQuery(IGroupRepo&, unsigned);
+struct GroupDto : Group {
+	operator std::string() const;
+};
+
+GroupDto getGroupByIdQuery(IGroupRepo&, unsigned);

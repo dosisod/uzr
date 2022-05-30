@@ -1,6 +1,7 @@
 #include "json.hpp"
 using json_exception = nlohmann::detail::exception;
 
+#include "domain/errors.hpp"
 #include "routes.hpp"
 #include "error.hpp"
 
@@ -47,6 +48,10 @@ static void exceptionHandler(const Request&, Response& res, std::exception&) {
 		res.set_content(e.what(), "text/plain");
 	}
 	catch (json_exception &e) {
+		res.status = 400;
+		res.set_content(e.what(), "text/plain");
+	}
+	catch (ValidationError &e) {
 		res.status = 400;
 		res.set_content(e.what(), "text/plain");
 	}

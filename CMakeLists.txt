@@ -13,23 +13,13 @@ target_precompile_headers(json PUBLIC src/vendor/json.hpp)
 include_directories(src)
 include_directories(src/vendor)
 
-add_executable(
-	uzr
-	src/main.cpp
-	src/application/handlers/group.cpp
-	src/application/handlers/user.cpp
-	src/application/app.cpp
-	src/application/error.cpp
-	src/application/config.cpp
-	src/application/routes/health.cpp
-	src/application/routes/auth.cpp
-	src/application/routes/group.cpp
-)
+file(GLOB_RECURSE libuzr_SRC CONFIGURE_DEPENDS "src/application/**.cpp")
+add_library(libuzr OBJECT ${libuzr_SRC})
+add_executable(uzr src/main.cpp)
 set_target_properties(uzr PROPERTIES COMPILE_FLAGS "-g -O0 -Wall -Wextra -pedantic -Werror")
-target_link_libraries(uzr PRIVATE httplib crypt json pthread)
+target_link_libraries(uzr PRIVATE httplib crypt json pthread libuzr)
 
-add_executable(
-	test_uzr
-	test/test.cpp
-)
+file(GLOB_RECURSE test_SRC CONFIGURE_DEPENDS "test/**.cpp")
+add_executable(test_uzr ${test_SRC})
 set_target_properties(test_uzr PROPERTIES COMPILE_FLAGS "-g -O0 -Wall -Wextra -pedantic -Werror")
+target_link_libraries(test_uzr PRIVATE httplib crypt libuzr)

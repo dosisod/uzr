@@ -16,7 +16,7 @@
 
 class UserRepo : public IUserRepo {
 public:
-	virtual void addUser(UserDto user) {
+	virtual void addUser(NewUserInfo user) {
 		// TODO: create a wrapper for calling shell scripts
 		errno = 0;
 		auto pid = fork();
@@ -49,7 +49,7 @@ public:
 		}
 	}
 
-	virtual bool isValidLogin(LoginDto login) {
+	virtual bool isValidLogin(Login login) {
 		setspent();
 		auto entry = getspnam(login.username.c_str());
 		endspent();

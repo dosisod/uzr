@@ -6,14 +6,15 @@
 namespace route::auth {
 	void login(const Request& req, Response& res) {
 		auto repo = UserRepo();
+		auto resp = loginCommand(repo, LoginDto::fromJson(req.body));
 
-		res.set_content(loginCommand(repo, req.body), "text/plain");
+		res.set_content(resp, "text/plain");
 	}
 
 	void addUser(const Request& req, Response& res) {
 		auto repo = UserRepo();
 
-		addUserCommand(repo, req.body);
+		addUserCommand(repo, NewUserInfoDto::fromJson(req.body));
 
 		res.status = 204;
 	}

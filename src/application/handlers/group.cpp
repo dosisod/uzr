@@ -8,19 +8,17 @@ using json = nlohmann::json;
 
 #include "group.hpp"
 
-std::string groupToGroupDto(Group& group);
-
-std::string getGroupByIdQuery(IGroupRepo& groupRepo, unsigned gid) {
+GroupDto getGroupByIdQuery(IGroupRepo& groupRepo, unsigned gid) {
 	auto group = groupRepo.getGroupById(gid);
 	if (!group) throw NotFoundException();
 
-	return groupToGroupDto(group.value());
+	return GroupDto(group.value());
 }
 
-std::string groupToGroupDto(Group& group) {
+GroupDto::operator std::string() const {
 	return (json {
-		{ "id", group.id },
-		{ "name", group.name },
-		{ "members", group.users }
+		{ "id", this->id },
+		{ "name", this->name },
+		{ "members", this->users }
 	}).dump();
 }

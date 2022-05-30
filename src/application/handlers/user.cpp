@@ -9,59 +9,55 @@ using json = nlohmann::json;
 
 #include "user.hpp"
 
-std::string userToLoginDto(User& user);
-
-std::string loginCommand(IUserRepo& userRepo, std::string body) {
-	json parsed = json::parse(body);
-
-	auto login = LoginDto {
-		.username = parsed.value("username", ""),
-		.password = parsed.value("password", "")
-	};
-
-	if (login.username.empty() || login.password.empty()) {
-		throw BadRequestException("Username or password not set");
-	}
-
+UserDto loginCommand(IUserRepo& userRepo, LoginDto login) {
 	if (!userRepo.isValidLogin(login)) {
 		throw UnauthorizedException("Invalid username or password");
 	}
 
 	auto user = userRepo.getByUsername(login.username);
-	if (!user) return nullptr;
+	if (!user) throw ServerErrorException("Login succeeded but user not found");
 
-	return userToLoginDto(user.value());
+	return UserDto(user.value());
 }
 
-void addUserCommand(IUserRepo& userRepo, std::string body) {
-	json parsed = json::parse(body);
+void addUserCommand(IUserRepo& userRepo, NewUserInfoDto newUser) {
+	userRepo.addUser(newUser);
+}
 
-	auto newUser = UserDto {
+UserDto::operator std::string() const {
+	return (json {
+		{ "username", username },
+		{ "userId", id },
+		{ "groupId", groupId }
+	}).dump();
+}
+
+LoginDto LoginDto::fromJson(std::string jsonBody) {
+	// TODO: create "JsonBody" type to auto-convert/parse json string
+	auto parsed = json::parse(jsonBody);
+
+	LoginDto login = {{
+		.username = parsed.value("username", ""),
+		.password = parsed.value("password", "")
+	}};
+
+	login.validate();
+
+	return login;
+}
+
+NewUserInfoDto NewUserInfoDto::fromJson(std::string jsonBody) {
+	auto parsed = json::parse(jsonBody);
+
+	NewUserInfoDto newUser = {{
 		.username = parsed.value("username", ""),
 		.password = parsed.value("password", ""),
 		.full_name = parsed.value("fullName", ""),
 		.phone_number = parsed.value("phoneNumber", ""),
 		.email = parsed.value("email", "")
-	};
+	}};
 
-	if (newUser.username.empty())
-		throw BadRequestException("Username cannot be empty");
-	if (newUser.password.empty())
-		throw BadRequestException("Password cannot be empty");
-	if (newUser.full_name.empty())
-		throw BadRequestException("Name cannot be empty");
-	if (newUser.phone_number.empty())
-		throw BadRequestException("Phone number cannot be empty");
-	if (newUser.email.empty())
-		throw BadRequestException("Email cannot be empty");
+	newUser.validate();
 
-	userRepo.addUser(newUser);
-}
-
-std::string userToLoginDto(User& user) {
-	return (json {
-		{ "username", user.username },
-		{ "userId", user.id },
-		{ "groupId", user.groupId }
-	}).dump();
+	return newUser;
 }
