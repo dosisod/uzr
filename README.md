@@ -4,7 +4,7 @@ A very small user management service built on [cpp-httplib](https://github.com/y
 
 # Installing, Building, and Running
 
-Requires cmake >= 3.21.3, and a compiler which supports C++20
+Requires cmake >= 3.21.3, and a compiler which supports C++20.
 
 To run manually:
 

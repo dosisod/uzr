@@ -1,12 +1,13 @@
 #pragma once
 
 #include <exception>
+#include <string>
 
 class ValidationError : public std::exception {
 public:
-	ValidationError(const char* msg) : msg(msg) {}
+	ValidationError(std::string msg) : msg(msg.c_str()) {}
 
-	virtual const char* what() noexcept { return msg; }
+	virtual const char* what() const noexcept { return msg; }
 
 	const char* msg;
 };

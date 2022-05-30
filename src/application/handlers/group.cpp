@@ -22,3 +22,5 @@ GroupDto::operator std::string() const {
 		{ "members", this->users }
 	}).dump();
 }
+
+GroupDto::GroupDto(const Group& g) : Group(g) {}

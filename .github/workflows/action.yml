@@ -1,9 +1,18 @@
-name: tests
+name: Tests
 
 on: [push, pull_request]
 
 jobs:
-  test:
+  unit-tests:
+    strategy:
+      matrix:
+        include:
+        - CC: gcc
+          CXX: g++
+
+        - CC: clang
+          CXX: clang++
+
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -12,11 +21,16 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ..
+        cmake -DCMAKE_CXX_COMPILER=${{ matrix.CXX }} -DCMAKE_C_COMPILER=${{ matrix.CC }} ..
         cmake --build .
 
     - name: Run unit tests
       run: ./build/test_uzr
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
 
     - name: Run e2e tests
       run: ./test.sh

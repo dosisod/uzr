@@ -32,6 +32,8 @@ UserDto::operator std::string() const {
 	}).dump();
 }
 
+UserDto::UserDto(const User& u) : User(u) {}
+
 LoginDto LoginDto::fromJson(std::string jsonBody) {
 	// TODO: create "JsonBody" type to auto-convert/parse json string
 	auto parsed = json::parse(jsonBody);

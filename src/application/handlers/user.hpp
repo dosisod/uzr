@@ -6,6 +6,8 @@
 
 struct UserDto : User {
 	operator std::string() const;
+
+	UserDto(const User& u);
 };
 
 struct LoginDto : Login {
