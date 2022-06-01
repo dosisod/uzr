@@ -1,15 +1,17 @@
+#include <utility>
+
 #include "catch.hpp"
 
-#include "domain/group.hpp"
-#include "domain/repo/groupRepo.hpp"
 #include "application/error.hpp"
 #include "application/handlers/group.hpp"
+#include "domain/group.hpp"
+#include "domain/repo/groupRepo.hpp"
 
 class FakeRepo : public IGroupRepo {
 public:
-	FakeRepo(Group g) : group(g) {}
+	explicit FakeRepo(Group g) : group(std::move(g)) {}
 
-	virtual std::optional<Group> getGroupById(unsigned) {
+	std::optional<Group> getGroupById(unsigned) override {
 		return group;
 	}
 
@@ -19,7 +21,7 @@ private:
 
 class DummyRepo : public IGroupRepo {
 public:
-	virtual std::optional<Group> getGroupById(unsigned) {
+	std::optional<Group> getGroupById(unsigned) override {
 		return {};
 	}
 };
@@ -42,6 +44,6 @@ TEST_CASE("Group DTO returned when found") {
 
 	CHECK(dto.id == 0);
 	CHECK(dto.name == "root");
-	CHECK(dto.users.size() == 0);
+	CHECK(dto.users.empty());
 	CHECK_FALSE(((std::string)dto).empty());
 }

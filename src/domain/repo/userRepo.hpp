@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include "domain/errors.hpp"
 
 #include "domain/user.hpp"
@@ -42,5 +44,5 @@ public:
 	virtual bool isValidLogin(Login login) = 0;
 	virtual std::optional<User> getByUsername(std::string username) = 0;
 
-	virtual ~IUserRepo() {}
+	virtual ~IUserRepo() = default;
 };

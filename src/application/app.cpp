@@ -2,18 +2,15 @@
 using json_exception = nlohmann::detail::exception;
 
 #include "domain/errors.hpp"
-#include "routes.hpp"
 #include "error.hpp"
+#include "routes.hpp"
 
 #include "app.hpp"
 
 static void logger(const Request& req, const Response& res);
 static void exceptionHandler(const Request&, Response& res, std::exception&);
 
-App::App(ApplicationConfig config) :
-	config(config),
-	server(Server())
-{
+App::App(ApplicationConfig config) : config(config) {
 	std::cout << "Starting on " << config.host << ":" << config.port << "\n";
 
 	server.Get("/health", route::health::get);
@@ -32,7 +29,7 @@ int App::serve() {
 	return 1;
 }
 
-// TODO: allow for optionally colorizing output
+// TODO(dosisod): allow for optionally colorizing output
 static void logger(const Request& req, const Response& res) {
 	std::cout << req.method << " " << req.path << " " << res.status << std::endl;
 }

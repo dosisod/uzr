@@ -6,5 +6,5 @@
 struct Group {
 	unsigned long id;
 	std::string name;
-	std::vector<std::string> users; // TODO: dont include user list in group
+	std::vector<std::string> users; // TODO(dosisod): dont include user list in group
 };

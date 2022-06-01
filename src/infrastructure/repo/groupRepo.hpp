@@ -7,9 +7,9 @@
 
 class GroupRepo : public IGroupRepo {
 public:
-	virtual std::optional<Group> getGroupById(unsigned gid) {
+	std::optional<Group> getGroupById(unsigned gid) override {
 		setgrent();
-		auto entry = getgrgid(gid);
+		auto *entry = getgrgid(gid);
 		endgrent();
 
 		if (!entry) return {};
@@ -18,7 +18,7 @@ public:
 
 		while (*entry->gr_mem) {
 			members.emplace_back(*entry->gr_mem);
-			entry->gr_mem++;
+			entry->gr_mem++; // NOLINT
 		}
 
 		return Group {

@@ -5,9 +5,9 @@
 
 class ValidationError : public std::exception {
 public:
-	ValidationError(std::string msg) : msg(msg.c_str()) {}
+	ValidationError(const std::string& msg) : msg(msg.c_str()) {}
 
-	virtual const char* what() const noexcept { return msg; }
+	[[nodiscard]] const char* what() const noexcept override { return msg; }
 
 	const char* msg;
 };

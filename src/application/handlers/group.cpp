@@ -1,4 +1,4 @@
-#include <string.h>
+#include <string>
 
 #include <json.hpp>
 using json = nlohmann::json;
@@ -12,7 +12,7 @@ GroupDto getGroupByIdQuery(IGroupRepo& groupRepo, unsigned gid) {
 	auto group = groupRepo.getGroupById(gid);
 	if (!group) throw NotFoundException();
 
-	return GroupDto(group.value());
+	return {group.value()};
 }
 
 GroupDto::operator std::string() const {

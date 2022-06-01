@@ -11,12 +11,12 @@ struct UserDto : User {
 };
 
 struct LoginDto : Login {
-	static LoginDto fromJson(std::string jsonBody);
+	static LoginDto fromJson(const std::string& jsonBody);
 };
 
 struct NewUserInfoDto : NewUserInfo {
-	static NewUserInfoDto fromJson(std::string jsonBody);
+	static NewUserInfoDto fromJson(const std::string& jsonBody);
 };
 
-UserDto loginCommand(IUserRepo&, LoginDto);
+UserDto loginCommand(IUserRepo&, const LoginDto&);
 void addUserCommand(IUserRepo&, NewUserInfoDto);

@@ -1,23 +1,24 @@
 #pragma once
 
-#include <errno.h>
-#include <optional>
+#include <cerrno>
 #include <pwd.h>
 #include <shadow.h>
-#include <string.h>
+#include <string>
+#include <string.h> // NOLINT
 #include <sys/wait.h>
 #include <unistd.h>
 
 #include "application/error.hpp"
 #include "domain/repo/userRepo.hpp"
 
-// should be defined in src/infrastructre
+// TODO(dosisod): should be defined in src/infrastructre
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define SCRIPT_DIR "/app/src/scripts"
 
 class UserRepo : public IUserRepo {
 public:
-	virtual void addUser(NewUserInfo user) {
-		// TODO: create a wrapper for calling shell scripts
+	void addUser(NewUserInfo user) override {
+		// TODO(dosisod): create a wrapper for calling shell scripts
 		errno = 0;
 		auto pid = fork();
 		if (pid == -1) {
@@ -26,7 +27,7 @@ public:
 		}
 		if (pid == 0) {
 			errno = 0;
-			execlp(
+			execlp( // NOLINT
 				SCRIPT_DIR"/user_add.sh",
 				SCRIPT_DIR"/user_add.sh",
 				user.username.c_str(),
@@ -49,9 +50,9 @@ public:
 		}
 	}
 
-	virtual bool isValidLogin(Login login) {
+	bool isValidLogin(Login login) override {
 		setspent();
-		auto entry = getspnam(login.username.c_str());
+		auto *entry = getspnam(login.username.c_str());
 		endspent();
 
 		if (!entry) return false;
@@ -62,9 +63,9 @@ public:
 		) == 0;
 	}
 
-	virtual std::optional<User> getByUsername(std::string username) {
+	std::optional<User> getByUsername(std::string username) override {
 		setpwent();
-		auto entry = getpwnam(username.c_str());
+		auto *entry = getpwnam(username.c_str());
 		endpwent();
 
 		if (!entry) return {};

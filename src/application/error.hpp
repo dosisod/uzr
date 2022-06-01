@@ -5,9 +5,9 @@
 
 class HttpException : public std::exception {
 public:
-	HttpException(std::string msg, int status);
+	HttpException(const std::string& msg, int status);
 
-	virtual const char* what() const noexcept { return msg; }
+	[[nodiscard]] const char* what() const noexcept override { return msg; }
 
 	const char* msg;
 	const int status;
@@ -15,20 +15,20 @@ public:
 
 class BadRequestException : public HttpException {
 public:
-	BadRequestException(std::string msg = "Bad request");
+	BadRequestException(const std::string& msg = "Bad request");
 };
 
 class UnauthorizedException : public HttpException {
 public:
-	UnauthorizedException(std::string msg = "Unauthorized");
+	UnauthorizedException(const std::string& msg = "Unauthorized");
 };
 
 class NotFoundException : public HttpException {
 public:
-	NotFoundException(std::string msg = "Not Found");
+	NotFoundException(const std::string& msg = "Not Found");
 };
 
 class ServerErrorException : public HttpException {
 public:
-	ServerErrorException(std::string msg = "Server Error");
+	ServerErrorException(const std::string& msg = "Server Error");
 };

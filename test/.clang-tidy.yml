@@ -1,0 +1,10 @@
+---
+Checks: 'clang-diagnostic-*,clang-analyzer-*,readability-*,performance-*,bugprone-*,cppcoreguidelines-*,google-readability-todo,cert-*-cpp,modernize-*,-modernize-use-trailing-return-type,misc-*,llvm-else-after-return,llvm-include-order,hicpp-*,-hicpp-named-parameters,-hicpp-braces-around-statements,-hicpp-explicit-conversions,-hicpp-named-parameter,-readability-named-parameter,-cppcoreguidelines-avoid-magic-numbers,-readability-magic-numbers,-readability-implicit-bool-conversion,-readability-braces-around-statements,-hicpp-signed-bitwise,-cppcoreguidelines-special-member-functions,-hicpp-special-member-functions'
+WarningsAsErrors: '*'
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+FormatStyle: none
+
+CheckOptions:
+- key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+  value: 'true'

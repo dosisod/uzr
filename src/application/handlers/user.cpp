@@ -1,4 +1,5 @@
-#include <string.h>
+#include <string>
+#include <utility>
 
 #include <json.hpp>
 using json = nlohmann::json;
@@ -9,7 +10,7 @@ using json = nlohmann::json;
 
 #include "user.hpp"
 
-UserDto loginCommand(IUserRepo& userRepo, LoginDto login) {
+UserDto loginCommand(IUserRepo& userRepo, const LoginDto& login) {
 	if (!userRepo.isValidLogin(login)) {
 		throw UnauthorizedException("Invalid username or password");
 	}
@@ -17,11 +18,11 @@ UserDto loginCommand(IUserRepo& userRepo, LoginDto login) {
 	auto user = userRepo.getByUsername(login.username);
 	if (!user) throw ServerErrorException("Login succeeded but user not found");
 
-	return UserDto(user.value());
+	return {user.value()};
 }
 
 void addUserCommand(IUserRepo& userRepo, NewUserInfoDto newUser) {
-	userRepo.addUser(newUser);
+	userRepo.addUser(std::move(newUser));
 }
 
 UserDto::operator std::string() const {
@@ -34,8 +35,8 @@ UserDto::operator std::string() const {
 
 UserDto::UserDto(const User& u) : User(u) {}
 
-LoginDto LoginDto::fromJson(std::string jsonBody) {
-	// TODO: create "JsonBody" type to auto-convert/parse json string
+LoginDto LoginDto::fromJson(const std::string& jsonBody) {
+	// TODO(dosisod): create "JsonBody" type to auto-convert/parse json string
 	auto parsed = json::parse(jsonBody);
 
 	LoginDto login = {{
@@ -48,7 +49,7 @@ LoginDto LoginDto::fromJson(std::string jsonBody) {
 	return login;
 }
 
-NewUserInfoDto NewUserInfoDto::fromJson(std::string jsonBody) {
+NewUserInfoDto NewUserInfoDto::fromJson(const std::string& jsonBody) {
 	auto parsed = json::parse(jsonBody);
 
 	NewUserInfoDto newUser = {{
