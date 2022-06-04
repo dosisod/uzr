@@ -17,11 +17,12 @@ include_directories(src/vendor)
 file(GLOB_RECURSE libuzr_SRC CONFIGURE_DEPENDS "src/application/**.cpp")
 add_library(libuzr OBJECT ${libuzr_SRC})
 
-add_executable(uzr src/main.cpp)
+file(GLOB_RECURSE uzr_api_SRC CONFIGURE_DEPENDS "src/presentation/**.cpp")
+add_executable(uzr src/main.cpp ${uzr_api_SRC})
 target_link_libraries(uzr PRIVATE httplib crypt json pthread libuzr)
 
 file(GLOB_RECURSE test_SRC CONFIGURE_DEPENDS "test/**.cpp")
 add_executable(test_uzr ${test_SRC})
-target_link_libraries(test_uzr PRIVATE httplib crypt pthread libuzr)
+target_link_libraries(test_uzr PRIVATE crypt libuzr)
 
 set_target_properties(libuzr uzr test_uzr PROPERTIES COMPILE_FLAGS "${COMMON_FLAGS}")

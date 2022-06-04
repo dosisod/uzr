@@ -4,13 +4,13 @@
 
 #include "config.hpp"
 
-class App {
+class Api {
 public:
-	App(ApplicationConfig config);
+	Api(ApiConfig config);
 
 	int serve();
 
 private:
-	ApplicationConfig config;
+	ApiConfig config;
 	httplib::Server server;
 };

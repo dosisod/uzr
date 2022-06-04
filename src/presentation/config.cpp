@@ -17,7 +17,7 @@ static const char* getHostOrDefault() {
 	return host ? host : DEFAULT_HOST;
 }
 
-ApplicationConfig::ApplicationConfig() :
+ApiConfig::ApiConfig() :
 	port(getPortOrDefault()),
 	host(getHostOrDefault())
 	{}

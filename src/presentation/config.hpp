@@ -1,8 +1,8 @@
 #pragma once
 
-class ApplicationConfig {
+class ApiConfig {
 public:
-	ApplicationConfig();
+	ApiConfig();
 
 	const int port;
 	const char* host;

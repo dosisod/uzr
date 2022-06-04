@@ -1,16 +1,16 @@
 #include "json.hpp"
 using json_exception = nlohmann::detail::exception;
 
+#include "application/error.hpp"
 #include "domain/errors.hpp"
-#include "error.hpp"
 #include "routes.hpp"
 
-#include "app.hpp"
+#include "api.hpp"
 
 static void logger(const Request& req, const Response& res);
 static void exceptionHandler(const Request&, Response& res, std::exception&);
 
-App::App(ApplicationConfig config) : config(config) {
+Api::Api(ApiConfig config) : config(config) {
 	std::cout << "Starting on " << config.host << ":" << config.port << "\n";
 
 	server.Get("/health", route::health::get);
@@ -21,7 +21,7 @@ App::App(ApplicationConfig config) : config(config) {
 	server.set_exception_handler(exceptionHandler);
 }
 
-int App::serve() {
+int Api::serve() {
 	errno = 1;
 	server.listen(config.host, config.port);
 	perror("uzr");

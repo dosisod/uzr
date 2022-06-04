@@ -1,10 +1,10 @@
-#include "application/app.hpp"
-#include "application/config.hpp"
+#include "presentation/api.hpp"
+#include "presentation/config.hpp"
 
 int main() {
-	ApplicationConfig config;
+	ApiConfig config;
 
-	App app(config);
+	Api api(config);
 
-	return app.serve();
+	return api.serve();
 }
