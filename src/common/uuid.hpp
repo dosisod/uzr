@@ -12,6 +12,7 @@ public:
 	explicit operator bool() const;
 	explicit operator std::string() const;
 	bool operator ==(const UUID& o) const;
+	bool operator !=(const UUID& o) const;
 
 private:
 	uuid_t uuid;

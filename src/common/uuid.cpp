@@ -14,6 +14,10 @@ bool UUID::operator ==(const UUID& o) const {
 	return uuid_compare(o.uuid, uuid) == 0;
 }
 
+bool UUID::operator !=(const UUID& o) const {
+	return !(&o == this);
+}
+
 UUID::UUID() { // NOLINT
 	uuid_generate(uuid);
 }
