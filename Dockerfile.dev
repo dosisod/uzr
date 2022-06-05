@@ -1,6 +1,6 @@
 FROM alpine:3.16.0
 
-RUN apk add build-base upx cmake
+RUN apk add build-base util-linux-dev upx cmake
 
 WORKDIR /app
 COPY . .

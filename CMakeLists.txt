@@ -14,15 +14,15 @@ target_precompile_headers(json PUBLIC src/vendor/json.hpp)
 include_directories(src)
 include_directories(src/vendor)
 
-file(GLOB_RECURSE libuzr_SRC CONFIGURE_DEPENDS "src/application/**.cpp")
+file(GLOB_RECURSE libuzr_SRC CONFIGURE_DEPENDS "src/application/**.cpp" "src/common/**.cpp")
 add_library(libuzr OBJECT ${libuzr_SRC})
 
 file(GLOB_RECURSE uzr_api_SRC CONFIGURE_DEPENDS "src/presentation/**.cpp")
 add_executable(uzr src/main.cpp ${uzr_api_SRC})
-target_link_libraries(uzr PRIVATE httplib crypt json pthread libuzr)
+target_link_libraries(uzr PRIVATE httplib crypt json pthread uuid libuzr)
 
 file(GLOB_RECURSE test_SRC CONFIGURE_DEPENDS "test/**.cpp")
 add_executable(test_uzr ${test_SRC})
-target_link_libraries(test_uzr PRIVATE crypt libuzr)
+target_link_libraries(test_uzr PRIVATE crypt uuid libuzr)
 
 set_target_properties(libuzr uzr test_uzr PROPERTIES COMPILE_FLAGS "${COMMON_FLAGS}")

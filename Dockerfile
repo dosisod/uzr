@@ -1,6 +1,6 @@
 FROM alpine:3.16.0 AS build
 
-RUN apk add build-base upx cmake
+RUN apk add build-base util-linux-dev upx cmake
 
 WORKDIR /app
 COPY . .
@@ -15,7 +15,7 @@ RUN mkdir build && \
 
 FROM alpine:3.16.0
 
-RUN apk add --no-cache libstdc++
+RUN apk add --no-cache libstdc++ libuuid
 COPY --from=build /app/uzr /app/uzr
 COPY src/scripts/* /app/src/scripts/
 
