@@ -8,6 +8,6 @@ namespace route::group {
 
 		auto groupRepo = GroupRepo();
 
-		res.set_content(getGroupByIdQuery(groupRepo, gid), "text/plain");
+		res.set_content(getGroupByIdQuery(groupRepo, gid), "text/json");
 	}
 }

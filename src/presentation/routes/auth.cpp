@@ -8,7 +8,7 @@ namespace route::auth {
 		auto repo = UserRepo();
 		auto resp = loginCommand(repo, LoginDto::fromJson(req.body));
 
-		res.set_content(resp, "text/plain");
+		res.set_content(resp, "text/json");
 	}
 
 	void addUser(const Request& req, Response& res) {
