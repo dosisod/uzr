@@ -9,7 +9,7 @@ Requires cmake >= 3.21.3, and a compiler which supports C++20.
 To run manually:
 
 ```
-$ git clone https://github.com/dosisod/uzr
+$ git clone --recursive https://github.com/dosisod/uzr
 $ cd uzr
 $ mkdir build && cd build
 $ cmake .. && cmake --build .
