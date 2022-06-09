@@ -1,4 +1,5 @@
 #include "application/handlers/group.hpp"
+#include "infrastructure/repo/groupRepo.hpp"
 
 #include "group.hpp"
 

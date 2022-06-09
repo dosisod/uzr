@@ -1,11 +1,7 @@
-#include <string>
+#pragma once
 
-#include "infrastructure/repo/groupRepo.hpp"
+#include "domain/repo/groupRepo.hpp"
 
-struct GroupDto : Group {
-	operator std::string() const;
-
-	GroupDto(const Group& g);
-};
+#include "../dto/group/groupDto.hpp"
 
 GroupDto getGroupByIdQuery(IGroupRepo&, unsigned);

@@ -21,8 +21,8 @@ UserDto loginCommand(IUserRepo& userRepo, const LoginDto& login) {
 	return {user.value()};
 }
 
-void addUserCommand(IUserRepo& userRepo, NewUserInfoDto newUser) {
-	userRepo.addUser(std::move(newUser));
+void addUserCommand(IUserRepo& userRepo, const NewUserInfoDto& newUser) {
+	userRepo.addUser(newUser);
 }
 
 UserDto::operator std::string() const {
