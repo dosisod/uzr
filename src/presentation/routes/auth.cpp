@@ -1,20 +1,22 @@
-#include "application/handlers/user.hpp"
-#include "infrastructure/repo/userRepo.hpp"
+#include "application/handlers/user/addUserCommandHandler.hpp"
+#include "application/handlers/user/loginCommandHandler.hpp"
+#include "domain/repo/userRepo.hpp"
+#include "presentation/di.hpp"
 
 #include "auth.hpp"
 
 namespace route::auth {
 	void login(const Request& req, Response& res) {
-		auto repo = UserRepo();
-		auto resp = loginCommand(repo, LoginDto::fromJson(req.body));
+		auto cmd = DiCreate<LoginCommandHandler>();
+		auto resp = cmd.handle(LoginDto::fromJson(req.body));
 
 		res.set_content(resp, "text/json");
 	}
 
 	void addUser(const Request& req, Response& res) {
-		auto repo = UserRepo();
+		auto cmd = DiCreate<AddUserCommandHandler>();
 
-		addUserCommand(repo, NewUserInfoDto::fromJson(req.body));
+		cmd.handle(NewUserInfoDto::fromJson(req.body));
 
 		res.status = 204;
 	}

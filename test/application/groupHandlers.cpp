@@ -3,7 +3,7 @@
 #include "catch.hpp"
 
 #include "application/error.hpp"
-#include "application/handlers/group.hpp"
+#include "application/handlers/group/getGroupByIdQueryHandler.hpp"
 #include "domain/group.hpp"
 #include "domain/repo/groupRepo.hpp"
 
@@ -28,8 +28,9 @@ public:
 
 TEST_CASE("Group not found throws exception") {
 	auto repo = DummyRepo();
+	auto query = GetGroupByIdQueryHandler(repo);
 
-	REQUIRE_THROWS_AS(getGroupByIdQuery(repo, 0), NotFoundException);
+	REQUIRE_THROWS_AS(query.handle(0), NotFoundException);
 }
 
 TEST_CASE("Group DTO returned when found") {
@@ -40,7 +41,8 @@ TEST_CASE("Group DTO returned when found") {
 	};
 
 	auto repo = FakeRepo(group);
-	auto dto = getGroupByIdQuery(repo, 0);
+	auto query = GetGroupByIdQueryHandler(repo);
+	auto dto = query.handle(0);
 
 	CHECK(dto.id == 0);
 	CHECK(dto.name == "root");

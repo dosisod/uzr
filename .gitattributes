@@ -1,4 +1,1 @@
-src/vendor/httplib.cc -diff
-src/vendor/json.hpp -diff
-src/vendor/json_fwd.hpp -diff
-src/vendor/catch.hpp -diff
+src/vendor/* -diff
