@@ -5,7 +5,7 @@ RUN apk add build-base util-linux-dev upx cmake
 WORKDIR /app
 COPY . .
 
-WORKDIR /app/build
+WORKDIR /app/build-docker
 
 RUN cmake ..
 

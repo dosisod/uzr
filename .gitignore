@@ -2,4 +2,4 @@
 *.o
 uzr
 .env
-build
+build*

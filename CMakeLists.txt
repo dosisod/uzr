@@ -24,8 +24,11 @@ file(GLOB_RECURSE uzr_api_SRC CONFIGURE_DEPENDS "src/presentation/**.cpp")
 add_executable(uzr src/main.cpp ${uzr_api_SRC})
 target_link_libraries(uzr PRIVATE httplib crypt SQLiteCpp sqlite3 dl json pthread uuid libuzr)
 
+add_executable(uzr_migrate src/infrastructure/db/migrate.cpp)
+target_link_libraries(uzr_migrate PRIVATE SQLiteCpp sqlite3 dl pthread)
+
 file(GLOB_RECURSE test_SRC CONFIGURE_DEPENDS "test/**.cpp")
 add_executable(test_uzr ${test_SRC})
 target_link_libraries(test_uzr PRIVATE crypt uuid libuzr)
 
-set_target_properties(libuzr uzr test_uzr PROPERTIES COMPILE_FLAGS "${COMMON_FLAGS}")
+set_target_properties(libuzr uzr uzr_migrate test_uzr PROPERTIES COMPILE_FLAGS "${COMMON_FLAGS}")
