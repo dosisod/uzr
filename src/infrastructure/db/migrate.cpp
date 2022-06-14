@@ -3,7 +3,7 @@
 
 #include <SQLiteCpp/Database.h>
 
-constexpr std::string DEFAULT_DB_FILENAME = "/etc/uzr_db.db3";
+constexpr auto DEFAULT_DB_FILENAME = "/etc/uzr_db.db3";
 
 void run(const std::string& dbFilename) {
 	SQLite::Database db(dbFilename, SQLite::OPEN_READWRITE|SQLite::OPEN_CREATE);
