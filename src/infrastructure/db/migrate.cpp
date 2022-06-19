@@ -3,7 +3,7 @@
 
 #include <SQLiteCpp/Database.h>
 
-constexpr auto DEFAULT_DB_FILENAME = "/etc/uzr_db.db3";
+#include "../config.hpp"
 
 void run(const std::string& dbFilename) {
 	SQLite::Database db(dbFilename, SQLite::OPEN_READWRITE|SQLite::OPEN_CREATE);
@@ -28,12 +28,10 @@ void run(const std::string& dbFilename) {
 }
 
 int main() {
-	const char* env = std::getenv("DB_FILENAME");
-
-	std::string dbFilename = env == nullptr ? DEFAULT_DB_FILENAME : env;
+	InfrastructureConfig config;
 
 	try {
-		run(dbFilename);
+		run(config.dbFilename);
 	}
 	catch (std::exception& e) {
 		std::cerr << "uzr_migrate: " << e.what() << "\n";

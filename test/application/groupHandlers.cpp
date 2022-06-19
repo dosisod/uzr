@@ -11,7 +11,7 @@ class FakeRepo : public IGroupRepo {
 public:
 	explicit FakeRepo(Group g) : group(std::move(g)) {}
 
-	std::optional<Group> getGroupById(unsigned) override {
+	std::optional<Group> getGroupById(const UUID&) override {
 		return group;
 	}
 
@@ -21,7 +21,7 @@ private:
 
 class DummyRepo : public IGroupRepo {
 public:
-	std::optional<Group> getGroupById(unsigned) override {
+	std::optional<Group> getGroupById(const UUID&) override {
 		return {};
 	}
 };
@@ -29,23 +29,25 @@ public:
 TEST_CASE("Group not found throws exception") {
 	auto repo = DummyRepo();
 	auto query = GetGroupByIdQueryHandler(repo);
+	auto invalidUuid = UUID();
 
-	REQUIRE_THROWS_AS(query.handle(0), NotFoundException);
+	REQUIRE_THROWS_AS(query.handle(invalidUuid), NotFoundException);
 }
 
 TEST_CASE("Group DTO returned when found") {
+	auto validUuid = UUID();
+
 	Group group = {
-		.id = 0,
-		.name = "root",
-		.users = {}
+		.id = validUuid,
+		.name = "root"
 	};
 
 	auto repo = FakeRepo(group);
 	auto query = GetGroupByIdQueryHandler(repo);
-	auto dto = query.handle(0);
 
-	CHECK(dto.id == 0);
+	auto dto = query.handle(validUuid);
+
+	CHECK(dto.id == validUuid);
 	CHECK(dto.name == "root");
-	CHECK(dto.users.empty());
 	CHECK_FALSE(((std::string)dto).empty());
 }

@@ -2,29 +2,30 @@
 
 #include <grp.h>
 
+#include <SQLiteCpp/Database.h>
+#include <SQLiteCpp/Statement.h>
+
 #include "domain/group.hpp"
 #include "domain/repo/groupRepo.hpp"
+#include "infrastructure/config.hpp"
 
 class GroupRepo : public IGroupRepo {
 public:
-	std::optional<Group> getGroupById(unsigned gid) override {
-		setgrent();
-		auto *entry = getgrgid(gid);
-		endgrent();
+	GroupRepo(const InfrastructureConfig& config) :
+		db(config.dbFilename, SQLite::OPEN_READWRITE) {}
 
-		if (!entry) return {};
+	std::optional<Group> getGroupById(const UUID& uuid) override {
+		SQLite::Statement query(db, "SELECT uuid, name FROM groups WHERE uuid = lower(?)");
+		query.bind(1, (std::string)uuid);
 
-		std::vector<std::string> members = {};
-
-		while (*entry->gr_mem) {
-			members.emplace_back(*entry->gr_mem);
-			entry->gr_mem++; // NOLINT
-		}
+		if (!query.executeStep()) return {};
 
 		return Group {
-			.id = gid,
-			.name = entry->gr_name,
-			.users = members,
+			.id = UUID(query.getColumn(0)),
+			.name = query.getColumn(1)
 		};
 	}
+
+private:
+	SQLite::Database db;
 };

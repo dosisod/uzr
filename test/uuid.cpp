@@ -17,7 +17,7 @@ TEST_CASE("Invalid UUID returns null UUID") {
 }
 
 TEST_CASE("Parse and compare UUID") {
-	std::string uuidAsString = "01234567-0123-0123-0123-0123456789AB";
+	std::string uuidAsString = "01234567-0123-0123-0123-0123456789ab";
 
 	UUID u = UUID(uuidAsString);
 

@@ -1,13 +1,14 @@
 #include <json.hpp>
 using json = nlohmann::json;
 
+#include "common/uuid.hpp"
+
 #include "./groupDto.hpp"
 
 GroupDto::operator std::string() const {
 	return (json {
-		{ "id", this->id },
-		{ "name", this->name },
-		{ "members", this->users }
+		{ "id", (std::string)this->id },
+		{ "name", this->name }
 	}).dump();
 }
 

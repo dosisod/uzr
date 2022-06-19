@@ -8,7 +8,7 @@ class GetGroupByIdQueryHandler {
 public:
 	GetGroupByIdQueryHandler(IGroupRepo& repo);
 
-	GroupDto handle(unsigned gid);
+	GroupDto handle(const UUID&);
 
 private:
 	IGroupRepo& repo;

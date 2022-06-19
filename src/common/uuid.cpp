@@ -28,6 +28,6 @@ UUID::operator bool() const {
 
 UUID::operator std::string() const {
 	char out[37] = {0}; // NOLINT
-	uuid_unparse_upper(uuid, out);
+	uuid_unparse_lower(uuid, out);
 	return {out};
 }

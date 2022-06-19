@@ -20,11 +20,12 @@ include_directories(src/vendor/SQLiteCpp/include)
 file(GLOB_RECURSE libuzr_SRC CONFIGURE_DEPENDS "src/application/**.cpp" "src/common/**.cpp")
 add_library(libuzr OBJECT ${libuzr_SRC})
 
-file(GLOB_RECURSE uzr_api_SRC CONFIGURE_DEPENDS "src/presentation/**.cpp")
+# TODO(dosisod): convert repos to use .cpp files, exlude main() from db migration folder
+file(GLOB_RECURSE uzr_api_SRC CONFIGURE_DEPENDS "src/presentation/**.cpp" "src/infrastructure/config.cpp")
 add_executable(uzr src/main.cpp ${uzr_api_SRC})
 target_link_libraries(uzr PRIVATE httplib crypt SQLiteCpp sqlite3 dl json pthread uuid libuzr)
 
-add_executable(uzr_migrate src/infrastructure/db/migrate.cpp)
+add_executable(uzr_migrate src/infrastructure/db/migrate.cpp src/infrastructure/config.cpp)
 target_link_libraries(uzr_migrate PRIVATE SQLiteCpp sqlite3 dl pthread)
 
 file(GLOB_RECURSE test_SRC CONFIGURE_DEPENDS "test/**.cpp")

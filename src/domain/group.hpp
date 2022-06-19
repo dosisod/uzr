@@ -3,8 +3,9 @@
 #include <string>
 #include <vector>
 
+#include "common/uuid.hpp"
+
 struct Group {
-	unsigned long id;
+	UUID id;
 	std::string name;
-	std::vector<std::string> users; // TODO(dosisod): dont include user list in group
 };

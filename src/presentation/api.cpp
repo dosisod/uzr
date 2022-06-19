@@ -16,7 +16,7 @@ Api::Api(ApiConfig config) : config(config) {
 	server.Get("/health", route::health::get);
 	server.Post("/auth/login", route::auth::login);
 	server.Post("/auth/addUser", route::auth::addUser);
-	server.Get("/group/(\\d+)", route::group::getById);
+	server.Get("/group/([0-9a-fA-F-]+)", route::group::getById);
 	server.set_logger(logger);
 	server.set_exception_handler(exceptionHandler);
 }

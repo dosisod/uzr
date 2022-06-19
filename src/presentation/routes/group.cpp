@@ -6,10 +6,8 @@
 
 namespace route::group {
 	void getById(const Request& req, Response& res) {
-		const unsigned gid = std::stoi(req.matches[1]);
-
 		auto cmd = DiCreate<GetGroupByIdQueryHandler>();
-		auto resp = cmd.handle(gid);
+		auto resp = cmd.handle(UUID(req.matches[1]));
 
 		res.set_content(resp, "text/json");
 	}

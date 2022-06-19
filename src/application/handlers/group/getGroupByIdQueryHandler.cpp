@@ -10,8 +10,8 @@ GetGroupByIdQueryHandler::GetGroupByIdQueryHandler(IGroupRepo& repo) :
 	repo(repo)
 	{}
 
-GroupDto GetGroupByIdQueryHandler::handle(unsigned gid) {
-	auto group = repo.getGroupById(gid);
+GroupDto GetGroupByIdQueryHandler::handle(const UUID& id) {
+	auto group = repo.getGroupById(id);
 	if (!group) throw NotFoundException();
 
 	return {group.value()};
