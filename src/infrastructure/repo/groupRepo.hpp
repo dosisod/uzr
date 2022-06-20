@@ -1,7 +1,5 @@
 #pragma once
 
-#include <grp.h>
-
 #include <SQLiteCpp/Database.h>
 #include <SQLiteCpp/Statement.h>
 

@@ -21,15 +21,16 @@ file(GLOB_RECURSE libuzr_SRC CONFIGURE_DEPENDS "src/application/**.cpp" "src/com
 add_library(libuzr OBJECT ${libuzr_SRC})
 
 # TODO(dosisod): convert repos to use .cpp files, exlude main() from db migration folder
-file(GLOB_RECURSE uzr_api_SRC CONFIGURE_DEPENDS "src/presentation/**.cpp" "src/infrastructure/config.cpp")
+file(GLOB_RECURSE uzr_api_SRC CONFIGURE_DEPENDS "src/presentation/**.cpp" "src/infrastructure/config.cpp" "src/infrastructure/repo/*.cpp")
 add_executable(uzr src/main.cpp ${uzr_api_SRC})
 target_link_libraries(uzr PRIVATE httplib crypt SQLiteCpp sqlite3 dl json pthread uuid libuzr)
 
 add_executable(uzr_migrate src/infrastructure/db/migrate.cpp src/infrastructure/config.cpp)
 target_link_libraries(uzr_migrate PRIVATE SQLiteCpp sqlite3 dl pthread)
 
-file(GLOB_RECURSE test_SRC CONFIGURE_DEPENDS "test/**.cpp")
+# TODO(dosisod): make seperate library/source list for infra code
+file(GLOB_RECURSE test_SRC CONFIGURE_DEPENDS "test/**.cpp" "src/infrastructure/repo/*.cpp")
 add_executable(test_uzr ${test_SRC})
-target_link_libraries(test_uzr PRIVATE crypt uuid libuzr)
+target_link_libraries(test_uzr PRIVATE SQLiteCpp sqlite3 crypt uuid libuzr)
 
 set_target_properties(libuzr uzr uzr_migrate test_uzr PROPERTIES COMPILE_FLAGS "${COMMON_FLAGS}")

@@ -9,21 +9,12 @@
 struct NewUserInfo {
 	std::string username;
 	std::string password;
-	std::string full_name;
-	std::string phone_number;
-	std::string email;
 
 	void validate() const {
 		if (username.empty())
 			throw ValidationError("Username cannot be empty");
 		if (password.empty())
 			throw ValidationError("Password cannot be empty");
-		if (full_name.empty())
-			throw ValidationError("Name cannot be empty");
-		if (phone_number.empty())
-			throw ValidationError("Phone number cannot be empty");
-		if (email.empty())
-			throw ValidationError("Email cannot be empty");
 	}
 };
 

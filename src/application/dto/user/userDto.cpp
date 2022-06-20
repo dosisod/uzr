@@ -7,8 +7,7 @@ using json = nlohmann::json;
 UserDto::operator std::string() const {
 	return (json {
 		{ "username", username },
-		{ "userId", id },
-		{ "groupId", groupId }
+		{ "userId", (std::string)id },
 	}).dump();
 }
 

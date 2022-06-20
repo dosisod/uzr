@@ -79,7 +79,7 @@ GET /health
 assert_status 200
 assert_response ok
 
-ADD_USER_REQ='{"username":"test_user","password":"qwerty","fullName":"TestUser","phoneNumber":"123-456-7890","email":"test@gmail.com"}'
+ADD_USER_REQ='{"username":"'$UZR_ADMIN_USER'","password":"'$UZR_ADMIN_PW'"}'
 POST /auth/addUser $ADD_USER_REQ
 assert_status 204
 
@@ -89,13 +89,13 @@ assert_response "Username is already taken"
 
 POST /auth/login '{"username":"'$UZR_ADMIN_USER'","password":"'$UZR_ADMIN_PW'"}'
 assert_status 200
-assert_response_contains $UZR_ADMIN_USER
+assert_response_contains "$UZR_ADMIN_USER"
 
 POST /auth/login '{"username":"'$UZR_ADMIN_USER'","password":"incorrect_password"}'
 assert_status 401
 assert_response "Invalid username or password"
 
-POST /auth/login '{"username":"invalid_username","password":"_"}'
+POST /auth/login '{"username":"invalid_username","password":"anything"}'
 assert_status 401
 assert_response "Invalid username or password"
 

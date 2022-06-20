@@ -9,10 +9,7 @@ NewUserInfoDto NewUserInfoDto::fromJson(const std::string& jsonBody) {
 
 	NewUserInfoDto newUser = {{
 		.username = parsed.value("username", ""),
-		.password = parsed.value("password", ""),
-		.full_name = parsed.value("fullName", ""),
-		.phone_number = parsed.value("phoneNumber", ""),
-		.email = parsed.value("email", "")
+		.password = parsed.value("password", "")
 	}};
 
 	newUser.validate();

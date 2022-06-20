@@ -2,8 +2,9 @@
 
 #include <string>
 
+#include "common/uuid.hpp"
+
 struct User {
+	UUID id;
 	std::string username;
-	unsigned long id;
-	unsigned long groupId;
 };
