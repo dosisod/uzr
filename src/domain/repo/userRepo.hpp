@@ -1,5 +1,6 @@
 #pragma once
 
+#include <crypt.h>
 #include <optional>
 
 #include "domain/errors.hpp"
