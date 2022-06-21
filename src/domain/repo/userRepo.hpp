@@ -3,6 +3,7 @@
 #include <crypt.h>
 #include <optional>
 
+#include "common/metadata.hpp"
 #include "domain/errors.hpp"
 
 #include "domain/user.hpp"
@@ -10,6 +11,7 @@
 struct NewUserInfo {
 	std::string username;
 	std::string password;
+	std::optional<Metadata> metadata;
 
 	void validate() const {
 		if (username.empty())

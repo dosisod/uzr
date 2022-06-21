@@ -2,6 +2,8 @@
 
 #include <SQLiteCpp/Statement.h>
 #include <base64.hpp>
+#include <json.hpp>
+using json = nlohmann::json;
 
 #include "application/error.hpp"
 
@@ -23,10 +25,11 @@ void UserRepo::addUser(NewUserInfo user) {
 		("$6$" + uuidToCryptSalt(id)).c_str()
 	);
 
-	SQLite::Statement query(db, "INSERT INTO users VALUES (?, ?, ?)");
+	SQLite::Statement query(db, "INSERT INTO users VALUES (?, ?, ?, ?)");
 	query.bind(1, (std::string)id);
 	query.bind(2, user.username);
 	query.bind(3, hash);
+	query.bind(4, json(user.metadata.value_or(Metadata{})).dump());
 
 	query.exec();
 }
@@ -46,14 +49,15 @@ bool UserRepo::isValidLogin(Login login) {
 }
 
 std::optional<User> UserRepo::getByUsername(std::string username) {
-	SQLite::Statement query(db, "SELECT uuid, username FROM users WHERE username = ?");
+	SQLite::Statement query(db, "SELECT uuid, username, metadata FROM users WHERE username = ?");
 	query.bind(1, username);
 
 	if (!query.executeStep()) return {};
 
 	return User {
 		.id = UUID(query.getColumn(0)),
-		.username = query.getColumn(1)
+		.username = query.getColumn(1),
+		.metadata = json::parse((std::string)query.getColumn(2)).get<Metadata>()
 	};
 }
 

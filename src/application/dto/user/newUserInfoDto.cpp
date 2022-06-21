@@ -7,9 +7,13 @@ using json = nlohmann::json;
 NewUserInfoDto NewUserInfoDto::fromJson(const std::string& jsonBody) {
 	auto parsed = json::parse(jsonBody);
 
+	std::optional<Metadata> metadata = {};
+	if (parsed.contains("metadata")) metadata = parsed["metadata"];
+
 	NewUserInfoDto newUser = {{
 		.username = parsed.value("username", ""),
-		.password = parsed.value("password", "")
+		.password = parsed.value("password", ""),
+		.metadata = metadata,
 	}};
 
 	newUser.validate();

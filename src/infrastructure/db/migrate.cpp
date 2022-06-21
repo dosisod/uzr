@@ -25,6 +25,10 @@ void run(const std::string& dbFilename) {
 			user_uuid TEXT NOT NULL
 		);
 	)");
+
+	db.exec("ALTER TABLE users ADD COLUMN metadata TEXT");
+
+	db.exec("ALTER TABLE groups ADD COLUMN metadata TEXT");
 }
 
 int main() {
