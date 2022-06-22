@@ -3,7 +3,9 @@ using json_exception = nlohmann::detail::exception;
 
 #include "application/error.hpp"
 #include "domain/errors.hpp"
-#include "routes.hpp"
+#include "routes/auth.hpp"
+#include "routes/group.hpp"
+#include "routes/health.hpp"
 
 #include "api.hpp"
 
@@ -13,11 +15,10 @@ static void exceptionHandler(const Request&, Response& res, std::exception&);
 Api::Api(ApiConfig config) : config(config) {
 	std::cout << "Starting on " << config.host << ":" << config.port << "\n";
 
-	server.Get("/health", route::health::get);
-	server.Post("/auth/login", route::auth::login);
-	server.Post("/auth/addUser", route::auth::addUser);
-	server.Get("/group/([0-9a-fA-F-]+)", route::group::getById);
-	server.Post("/group", route::group::addGroup);
+	route::health::setup(server);
+	route::auth::setup(server);
+	route::group::setup(server);
+
 	server.set_logger(logger);
 	server.set_exception_handler(exceptionHandler);
 }
@@ -54,6 +55,7 @@ static void exceptionHandler(const Request&, Response& res, std::exception&) {
 		res.set_content(e.what(), "text/plain");
 	}
 	catch (std::exception& e) {
-		res.set_content(e.what(), "text/plain");
+		std::cerr << "SERVER ERROR: " << e.what() << "\n";
+		res.set_content("Server error", "text/plain");
 	}
 }

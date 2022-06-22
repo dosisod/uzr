@@ -20,4 +20,9 @@ namespace route::auth {
 
 		res.status = 204;
 	}
+
+	void setup(Server& server) {
+		server.Post("/auth/login", login);
+		server.Post("/auth/addUser", addUser);
+	}
 }

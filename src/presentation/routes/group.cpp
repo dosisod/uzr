@@ -19,4 +19,9 @@ namespace route::group {
 
 		res.set_content(resp, "text/json");
 	}
+
+	void setup(Server& server) {
+		server.Get("/group/([0-9a-fA-F-]+)", getById);
+		server.Post("/group", addGroup);
+	}
 }
