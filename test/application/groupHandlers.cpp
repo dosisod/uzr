@@ -15,6 +15,8 @@ public:
 		return group;
 	}
 
+	std::optional<Group> addGroup(const NewGroup&) override { return {}; }
+
 private:
 	Group group;
 };
@@ -24,6 +26,8 @@ public:
 	std::optional<Group> getGroupById(const UUID&) override {
 		return {};
 	}
+
+	std::optional<Group> addGroup(const NewGroup&) override { return {}; }
 };
 
 TEST_CASE("Group not found throws exception") {

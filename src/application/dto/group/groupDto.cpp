@@ -8,7 +8,8 @@ using json = nlohmann::json;
 GroupDto::operator std::string() const {
 	return (json {
 		{ "id", (std::string)this->id },
-		{ "name", this->name }
+		{ "name", this->name },
+		{ "metadata", this->metadata }
 	}).dump();
 }
 
