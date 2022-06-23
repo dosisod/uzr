@@ -4,7 +4,7 @@
 
 **Returns** `ok` with status code 200 if the server is up.
 
-### `POST /login`
+### `POST /auth/login`
 
 **Expected JSON**:
 
@@ -17,7 +17,7 @@
 
 **Returns** an error message and 401 status code upon invalid username/password.
 
-### `POST /user/add`
+### `POST /auth/addUser`
 
 **Expected JSON**:
 
@@ -25,9 +25,7 @@
 |-------|------|
 | username | string |
 | password | string |
-| fullName | string |
-| phoneNumber | string |
-| email | string |
+| metadata | dictionary<string, string>? |
 
 **Returns** a `User` and 200 status upon successful creation.
 
@@ -41,20 +39,33 @@
 
 **Returns** 404 status code if group exist.
 
+### `POST /group`
+
+**Expected JSON**
+
+| Field | Type |
+|-------|------|
+| name | string |
+| metadata | dictionary<string, string>? |
+
+**Returns** a `Group` if group was able to be created.
+
+**Returns** 400 status code if group name already is in use.
+
 ## Schemas
 
 ### `User`
 
 | Field | Type |
 |-------|------|
+| id | UUID (string) |
 | username | string |
-| userId | integer |
-| groupId | integer |
+| metadata | dictionary<string, string> |
 
 ### `Group`
 
 | Field | Type |
 |-------|------|
-| groupId | integer |
+| id | UUID (string) |
 | name | string |
-| members | string[] |
+| metadata | dictionary<string, string> |
