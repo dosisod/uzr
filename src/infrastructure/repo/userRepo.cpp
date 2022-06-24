@@ -104,5 +104,9 @@ std::string uuidToCryptSalt(const UUID& uuid) {
 		binary[i / 2] = (char)byte;
 	}
 
-	return Base64::Encode(binary);
+	std::string b64 = Base64::Encode(binary);
+
+	b64.erase(std::remove(b64.begin(), b64.end(), '='), b64.end());
+
+	return b64;
 }
