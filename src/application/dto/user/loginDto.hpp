@@ -6,4 +6,6 @@
 
 struct LoginDto : Login {
 	static LoginDto fromJson(const std::string& jsonBody);
+
+	LoginDto(const Login& l);
 };

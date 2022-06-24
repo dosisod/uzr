@@ -18,3 +18,5 @@ NewGroupDto NewGroupDto::fromJson(const std::string& jsonBody) {
 
 	return newGroup;
 }
+
+NewGroupDto::NewGroupDto(const NewGroup& group) : NewGroup(group) {}

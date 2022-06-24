@@ -25,12 +25,14 @@ file(GLOB_RECURSE uzr_api_SRC CONFIGURE_DEPENDS "src/presentation/**.cpp" "src/i
 add_executable(uzr src/main.cpp ${uzr_api_SRC})
 target_link_libraries(uzr PRIVATE httplib crypt SQLiteCpp sqlite3 dl json pthread uuid libuzr)
 
-add_executable(uzr_migrate src/infrastructure/db/migrate.cpp src/infrastructure/config.cpp)
-target_link_libraries(uzr_migrate PRIVATE SQLiteCpp sqlite3 dl pthread)
+file(GLOB_RECURSE uzr_migrate_SRC CONFIGURE_DEPENDS src/infrastructure/db/migrate.cpp)
+add_library(libuzr_migrate OBJECT ${uzr_migrate_SRC} src/infrastructure/config.cpp)
+add_executable(uzr_migrate src/infrastructure/db/main.cpp)
+target_link_libraries(uzr_migrate PRIVATE libuzr_migrate SQLiteCpp sqlite3)
 
 # TODO(dosisod): make seperate library/source list for infra code
 file(GLOB_RECURSE test_SRC CONFIGURE_DEPENDS "test/**.cpp" "src/infrastructure/repo/*.cpp")
 add_executable(test_uzr ${test_SRC})
-target_link_libraries(test_uzr PRIVATE SQLiteCpp sqlite3 crypt uuid libuzr)
+target_link_libraries(test_uzr PRIVATE SQLiteCpp sqlite3 crypt uuid libuzr libuzr_migrate)
 
 set_target_properties(libuzr uzr uzr_migrate test_uzr PROPERTIES COMPILE_FLAGS "${COMMON_FLAGS}")

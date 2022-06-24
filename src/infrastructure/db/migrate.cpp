@@ -1,21 +1,16 @@
 #include <iostream>
 #include <string>
 
-#include <SQLiteCpp/Database.h>
+#include "migrate.hpp"
 
-#include "../config.hpp"
-
-unsigned getMigrationVersion(const SQLite::Database& db);
 void run(SQLite::Database& db);
 
 #include "./migrations.hpp"
 
-int main() {
-	InfrastructureConfig config;
-
+int migrate(const std::string& dbFilename, bool quiet) {
 	try {
 		SQLite::Database db(
-			config.dbFilename,
+			dbFilename,
 			SQLite::OPEN_READWRITE|SQLite::OPEN_CREATE
 		);
 
@@ -26,7 +21,7 @@ int main() {
 		return 1;
 	}
 
-	std::cout << "uzr_migrate: Migration successful\n";
+	if (!quiet) std::cout << "uzr_migrate: Migration successful\n";
 
 	return 0;
 }

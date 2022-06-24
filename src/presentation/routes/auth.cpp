@@ -1,4 +1,4 @@
-#include "application/handlers/user/addUserCommandHandler.hpp"
+#include "application/dto/user/newUserInfoDto.hpp"
 #include "application/handlers/user/loginCommandHandler.hpp"
 #include "domain/repo/userRepo.hpp"
 #include "presentation/di.hpp"
@@ -14,9 +14,9 @@ namespace route::auth {
 	}
 
 	void addUser(const Request& req, Response& res) {
-		auto cmd = DiCreate<AddUserCommandHandler>();
+		IUserRepo& repo = DiCreate<IUserRepo&>();
 
-		cmd.handle(NewUserInfoDto::fromJson(req.body));
+		repo.addUser(NewUserInfoDto::fromJson(req.body));
 
 		res.status = 204;
 	}

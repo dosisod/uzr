@@ -17,3 +17,5 @@ LoginDto LoginDto::fromJson(const std::string& jsonBody) {
 
 	return login;
 }
+
+LoginDto::LoginDto(const Login& l) : Login(l) {}
