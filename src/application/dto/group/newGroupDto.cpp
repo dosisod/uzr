@@ -1,11 +1,6 @@
-#include <json.hpp>
-using json = nlohmann::json;
-
 #include "./newGroupDto.hpp"
 
-NewGroupDto NewGroupDto::fromJson(const std::string& jsonBody) {
-	auto parsed = json::parse(jsonBody);
-
+NewGroupDto NewGroupDto::fromJson(const JsonBody& parsed) {
 	std::optional<Metadata> metadata = {};
 	if (parsed.contains("metadata")) metadata = parsed["metadata"];
 

@@ -14,7 +14,7 @@ static char hexToBinary(char c);
 UserRepo::UserRepo(const InfrastructureConfig& config) :
 	db(config.dbFilename, SQLite::OPEN_READWRITE) {}
 
-void UserRepo::addUser(NewUserInfo user) {
+void UserRepo::addUser(const NewUserInfo& user) {
 	if (getByUsername(user.username)) {
 		throw BadRequestException("Username is already taken");
 	}
@@ -34,7 +34,7 @@ void UserRepo::addUser(NewUserInfo user) {
 	query.exec();
 }
 
-bool UserRepo::isValidLogin(Login login) {
+bool UserRepo::isValidLogin(const Login& login) {
 	SQLite::Statement query(db, "SELECT password_hash FROM users WHERE username = ?");
 	query.bind(1, login.username);
 
@@ -48,7 +48,7 @@ bool UserRepo::isValidLogin(Login login) {
 	) == 0;
 }
 
-std::optional<User> UserRepo::getByUsername(std::string username) {
+std::optional<User> UserRepo::getByUsername(const std::string& username) {
 	SQLite::Statement query(db, "SELECT uuid, username, metadata FROM users WHERE username = ?");
 	query.bind(1, username);
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
+#include <string_view>
 
 #include <SQLiteCpp/Database.h>
 
-int migrate(const std::string& dbFilename, bool quiet=false);
+int migrate(std::string_view dbFilename, bool quiet=false);
 unsigned getMigrationVersion(const SQLite::Database& db);

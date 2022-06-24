@@ -1,12 +1,6 @@
-#include <json.hpp>
-using json = nlohmann::json;
-
-
 #include "./newUserInfoDto.hpp"
 
-NewUserInfoDto NewUserInfoDto::fromJson(const std::string& jsonBody) {
-	auto parsed = json::parse(jsonBody);
-
+NewUserInfoDto NewUserInfoDto::fromJson(const JsonBody& parsed) {
 	std::optional<Metadata> metadata = {};
 	if (parsed.contains("metadata")) metadata = parsed["metadata"];
 

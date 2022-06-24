@@ -1,6 +1,5 @@
 #pragma once
 
-#include <crypt.h>
 #include <optional>
 
 #include "common/metadata.hpp"
@@ -34,9 +33,9 @@ struct Login {
 
 class IUserRepo {
 public:
-	virtual void addUser(NewUserInfo user) = 0;
-	virtual bool isValidLogin(Login login) = 0;
-	virtual std::optional<User> getByUsername(std::string username) = 0;
+	virtual void addUser(const NewUserInfo& user) = 0;
+	virtual bool isValidLogin(const Login& login) = 0;
+	virtual std::optional<User> getByUsername(const std::string& username) = 0;
 
 	virtual ~IUserRepo() = default;
 };

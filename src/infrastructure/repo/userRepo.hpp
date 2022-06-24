@@ -18,9 +18,9 @@ class UserRepo : public IUserRepo {
 public:
 	UserRepo(const InfrastructureConfig& config);
 
-	void addUser(NewUserInfo user) override;
-	bool isValidLogin(Login login) override;
-	std::optional<User> getByUsername(std::string username) override;
+	void addUser(const NewUserInfo& user) override;
+	bool isValidLogin(const Login& login) override;
+	std::optional<User> getByUsername(const std::string& username) override;
 
 private:
 	SQLite::Database db;

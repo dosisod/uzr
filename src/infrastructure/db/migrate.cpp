@@ -7,7 +7,7 @@ void run(SQLite::Database& db);
 
 #include "./migrations.hpp"
 
-int migrate(const std::string& dbFilename, bool quiet) {
+int migrate(std::string_view dbFilename, bool quiet) {
 	try {
 		SQLite::Database db(
 			dbFilename,
