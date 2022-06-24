@@ -11,7 +11,7 @@
 struct NewUserInfo {
 	std::string username;
 	std::string password;
-	std::optional<Metadata> metadata;
+	std::optional<Metadata> metadata = {};
 
 	void validate() const {
 		if (username.empty())
