@@ -2,15 +2,12 @@
 #include <crypt.h>
 
 #include <SQLiteCpp/Statement.h>
-#include <base64.hpp>
 #include <json.hpp>
 using json = nlohmann::json;
 
 #include "application/error.hpp"
 
 #include "./userRepo.hpp"
-
-static char hexToBinary(char c);
 
 UserRepo::UserRepo(const InfrastructureConfig& config) :
 	db(config.dbFilename, SQLite::OPEN_READWRITE) {}
@@ -20,11 +17,10 @@ void UserRepo::addUser(const NewUserInfo& user) {
 		throw BadRequestException("Username is already taken");
 	}
 
-	UUID id = UUID();
-	auto *hash = crypt(
-		user.password.c_str(),
-		("$6$" + uuidToCryptSalt(id)).c_str()
-	);
+	auto *salt = crypt_gensalt("$6$", 10'000, nullptr, 0);
+	auto *hash = crypt(user.password.c_str(), salt);
+
+	UUID id;
 
 	SQLite::Statement query(db, "INSERT INTO users VALUES (?, ?, ?, ?)");
 	query.bind(1, (std::string)id);
@@ -60,54 +56,4 @@ std::optional<User> UserRepo::getByUsername(const std::string& username) {
 		.username = query.getColumn(1),
 		.metadata = json::parse((std::string)query.getColumn(2)).get<Metadata>()
 	};
-}
-
-static char hexToBinary(char c) {
-	switch (c) {
-		default:
-		case '0': return '\0';
-		case '1': return '\x1';
-		case '2': return '\x2';
-		case '3': return '\x3';
-		case '4': return '\x4';
-		case '5': return '\x5';
-		case '6': return '\x6';
-		case '7': return '\x7';
-		case '8': return '\x8';
-		case '9': return '\x9';
-		case 'A':
-		case 'a': return '\xA';
-		case 'B':
-		case 'b': return '\xB';
-		case 'C':
-		case 'c': return '\xC';
-		case 'D':
-		case 'd': return '\xD';
-		case 'E':
-		case 'e': return '\xE';
-		case 'F':
-		case 'f': return '\xF';
-	}
-}
-
-std::string uuidToCryptSalt(const UUID& uuid) {
-	std::string hex = (std::string)uuid;
-	hex.erase(std::remove(hex.begin(), hex.end(), '-'), hex.end());
-
-	std::string binary(16, ' ');
-
-	for (unsigned i = 0; i < hex.length(); i += 2) {
-		const unsigned byte = (
-			hexToBinary(hex[i]) << 4) |
-			hexToBinary(hex[i + 1]
-		);
-
-		binary[i / 2] = (char)byte;
-	}
-
-	std::string b64 = Base64::Encode(binary);
-
-	b64.erase(std::remove(b64.begin(), b64.end(), '='), b64.end());
-
-	return b64;
 }

@@ -28,26 +28,3 @@ jobs:
 
     - name: Run unit tests
       run: ./build/test_uzr
-
-  e2e-tests:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
-
-    - name: Run e2e tests
-      run: ./test.sh
-
-  clang-tidy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
-
-    - name: Install Clang Tidy
-      run: sudo apt install clang-tidy-12
-
-    - name: Clang Tidy
-      run: ./test/clang-tidy.sh
