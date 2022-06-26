@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <crypt.h>
 
 #include <SQLiteCpp/Statement.h>
 #include <base64.hpp>
