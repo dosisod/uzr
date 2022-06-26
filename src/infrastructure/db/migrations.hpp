@@ -29,3 +29,12 @@ constexpr auto MIGRATION_1 = R"(
 
 	UPDATE migration_version SET version = 2;
 )";
+
+constexpr auto MIGRATION_2 = R"(
+	CREATE TABLE roles (
+		id INT NOT NULL PRIMARY KEY,
+		name TEXT NOT NULL UNIQUE
+	);
+
+	UPDATE migration_version SET version = 3;
+)";

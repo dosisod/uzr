@@ -29,7 +29,8 @@ int migrate(std::string_view dbFilename, bool quiet) {
 void run(SQLite::Database& db) {
 	switch (getMigrationVersion(db)) {
 		case 0: db.exec(MIGRATION_0); [[fallthrough]];
-		case 1: db.exec(MIGRATION_1);
+		case 1: db.exec(MIGRATION_1); [[fallthrough]];
+		case 2: db.exec(MIGRATION_2);
 	}
 }
 
