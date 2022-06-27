@@ -9,6 +9,8 @@ using json = nlohmann::json;
 
 #include "./userRepo.hpp"
 
+static const char* getCryptHash(const std::string& password);
+
 UserRepo::UserRepo(const InfrastructureConfig& config) :
 	db(config.dbFilename, SQLite::OPEN_READWRITE) {}
 
@@ -17,16 +19,15 @@ void UserRepo::addUser(const NewUserInfo& user) {
 		throw BadRequestException("Username is already taken");
 	}
 
-	auto *salt = crypt_gensalt("$6$", 10'000, nullptr, 0);
-	auto *hash = crypt(user.password.c_str(), salt);
-
-	UUID id;
+	auto id = (std::string)UUID();
+	const auto *hash = getCryptHash(user.password);
+	auto metadata = json(user.metadata.value_or(Metadata{})).dump();
 
 	SQLite::Statement query(db, "INSERT INTO users VALUES (?, ?, ?, ?)");
-	query.bind(1, (std::string)id);
+	query.bind(1, id);
 	query.bind(2, user.username);
 	query.bind(3, hash);
-	query.bind(4, json(user.metadata.value_or(Metadata{})).dump());
+	query.bind(4, metadata);
 
 	query.exec();
 }
@@ -56,4 +57,17 @@ std::optional<User> UserRepo::getByUsername(const std::string& username) {
 		.username = query.getColumn(1),
 		.metadata = json::parse((std::string)query.getColumn(2)).get<Metadata>()
 	};
+}
+
+void UserRepo::changePassword(const ChangePassword& req) {
+	SQLite::Statement query(db, "UPDATE users SET password_hash = ? WHERE uuid = ?");
+	query.bind(1, getCryptHash(req.newPassword));
+	query.bind(2, (std::string)req.userId);
+
+	query.exec();
+}
+
+static const char* getCryptHash(const std::string& password) {
+	auto *salt = crypt_gensalt("$6$", 10'000, nullptr, 0);
+	return crypt(password.c_str(), salt);
 }

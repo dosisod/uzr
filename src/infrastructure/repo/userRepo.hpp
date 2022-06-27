@@ -14,6 +14,7 @@ public:
 	void addUser(const NewUserInfo& user) override;
 	bool isValidLogin(const Login& login) override;
 	std::optional<User> getByUsername(const std::string& username) override;
+	void changePassword(const ChangePassword& req) override;
 
 private:
 	SQLite::Database db;

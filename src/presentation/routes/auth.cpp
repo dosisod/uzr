@@ -1,3 +1,4 @@
+#include "application/dto/user/changePasswordDto.hpp"
 #include "application/dto/user/newUserInfoDto.hpp"
 #include "application/handlers/user/loginCommandHandler.hpp"
 #include "domain/repo/userRepo.hpp"
@@ -21,8 +22,17 @@ namespace route::auth {
 		res.status = 204;
 	}
 
+	void changePassword(const Request& req, Response& res) {
+		IUserRepo& repo = DiCreate<IUserRepo&>();
+
+		repo.changePassword(ChangePasswordDto::fromJson(req.body));
+
+		res.status = 204;
+	}
+
 	void setup(Server& server) {
 		server.Post("/auth/login", login);
 		server.Post("/auth/addUser", addUser);
+		server.Post("/auth/changePassword", changePassword);
 	}
 }

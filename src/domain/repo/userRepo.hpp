@@ -31,11 +31,23 @@ struct Login {
 	}
 };
 
+struct ChangePassword {
+	UUID userId;
+	std::string newPassword;
+
+	void validate() const {
+		if (!userId || newPassword.empty()) {
+			throw ValidationError("User id or new password is empty");
+		}
+	}
+};
+
 class IUserRepo {
 public:
 	virtual void addUser(const NewUserInfo& user) = 0;
 	virtual bool isValidLogin(const Login& login) = 0;
 	virtual std::optional<User> getByUsername(const std::string& username) = 0;
+	virtual void changePassword(const ChangePassword& req) = 0;
 
 	virtual ~IUserRepo() = default;
 };

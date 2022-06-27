@@ -63,3 +63,40 @@ TEST_CASE("user login validation") {
 		}));
 	}
 }
+
+TEST_CASE("Change user password") {
+	TemporaryDb db;
+	InfrastructureConfig config;
+	config.dbFilename = db.filename;
+
+	UserRepo repo(config);
+
+	NewUserInfo newUser {
+		.username = "username",
+		.password = "password",
+	};
+
+	repo.addUser(newUser);
+
+	REQUIRE(repo.isValidLogin(Login {
+		.username = "username",
+		.password = "password"
+	}));
+
+	auto userId = repo.getByUsername("username");
+
+	repo.changePassword(ChangePassword {
+		.userId = userId->id,
+		.newPassword = "new password"
+	});
+
+	REQUIRE(repo.isValidLogin(Login {
+		.username = "username",
+		.password = "new password"
+	}));
+
+	REQUIRE_FALSE(repo.isValidLogin(Login {
+		.username = "username",
+		.password = "password"
+	}));
+}
