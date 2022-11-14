@@ -1,4 +1,4 @@
-FROM alpine:3.16.2 AS build
+FROM alpine:3.16.3 AS build
 
 RUN apk add build-base util-linux-dev upx cmake
 
@@ -14,7 +14,7 @@ RUN mkdir build && \
 RUN ./build/uzr_migrate
 
 
-FROM alpine:3.16.2
+FROM alpine:3.16.3
 
 RUN apk add --no-cache libstdc++ libuuid
 COPY --from=build /app/build/uzr /app/uzr
